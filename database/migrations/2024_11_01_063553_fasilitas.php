@@ -19,6 +19,6 @@ class CreateFasilitasTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('fasilitas');
+        Schema::dropIfExists(table: 'fasilitas');
     }
 }
