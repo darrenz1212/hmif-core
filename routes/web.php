@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KalabController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\HmifController;
+use App\Http\Controllers\RoomController;
 
 Route::get('/', function () {
     return view('login');
@@ -16,6 +17,7 @@ Route::get('/dashboard', function () {
 
 //======================================================   KALAB SIDE   ======================================================
 Route::get('klb-dash',[KalabController::class,'index'])->name('kalab-dashboard');
+Route::get('klb-room',[RoomController::class,'showAllRoom'])->name('kalab-showroom');
 //====================================================== KALAB SIDE END ======================================================
 
 //======================================================   HMIF SIDE   ======================================================
