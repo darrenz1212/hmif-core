@@ -16,7 +16,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        return view('login');
     }
 
     /**
@@ -25,9 +25,19 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
+        $user = Auth::user();
+
+        if ($user->role === 'kalab') {
+            return redirect()->route('kalab-dashboard');
+        } elseif ($user->role === 'hmif') {
+            return redirect()->route('hmif-dashboard');
+        } elseif ($user->role === 'stafflab') {
+            return redirect()->route('stafflab-dashboard');
+        }
+
+        // Jika tidak ada role yang cocok, redirect ke halaman default
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -39,7 +49,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

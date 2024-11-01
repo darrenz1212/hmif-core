@@ -165,7 +165,7 @@
             <div class="container-fluid"> <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-6">
-                        <h3 class="mb-0">HMIF CORE DASHBOARD</h3>
+                        @yield('header-content')
                     </div>
                 </div> <!--end::Row-->
             </div> <!--end::Container-->
