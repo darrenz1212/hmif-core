@@ -22,6 +22,11 @@ Route::get('klb-room',[RoomController::class,'showAllRoom'])->name('kalab-showro
 
 //======================================================   HMIF SIDE   ======================================================
 Route::get('hmif-dash',[HmifController::class,'index'])->name('hmif-dashboard');
+Route::get('hmif/pengajuanRuangan', [HmifController::class, 'pengajuanRuangan'])->name('pengajuanRuangan');
+Route::post('hmif/pengajuanRuangan', [HmifController::class, 'submitPengajuanRuangan'])->name('submitPengajuanRuangan');
+Route::get('/hmif/statusPemRuangan', [HmifController::class, 'statusPemRuangan'])->name('statusPemRuangan');
+Route::get('/hmif/ketersediaanRuangan', [HmifController::class, 'ketersediaanRuangan'])->name('ketersediaanRuangan');
+
 //====================================================== HMIF SIDE END ======================================================
 
 //======================================================   STAFF SIDE   ======================================================
