@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\KalabController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\HmifController;
+use App\Http\Controllers\RoomController;
 
 Route::get('/', function () {
     return view('login');
@@ -16,10 +17,16 @@ Route::get('/dashboard', function () {
 
 //======================================================   KALAB SIDE   ======================================================
 Route::get('klb-dash',[KalabController::class,'index'])->name('kalab-dashboard');
+Route::get('klb-room',[RoomController::class,'showAllRoom'])->name('kalab-showroom');
 //====================================================== KALAB SIDE END ======================================================
 
 //======================================================   HMIF SIDE   ======================================================
 Route::get('hmif-dash',[HmifController::class,'index'])->name('hmif-dashboard');
+Route::get('hmif/pengajuanRuangan', [HmifController::class, 'pengajuanRuangan'])->name('pengajuanRuangan');
+Route::post('hmif/pengajuanRuangan', [HmifController::class, 'submitPengajuanRuangan'])->name('submitPengajuanRuangan');
+Route::get('/hmif/statusPemRuangan', [HmifController::class, 'statusPemRuangan'])->name('statusPemRuangan');
+Route::get('/hmif/ketersediaanRuangan', [HmifController::class, 'ketersediaanRuangan'])->name('ketersediaanRuangan');
+
 //====================================================== HMIF SIDE END ======================================================
 
 //======================================================   STAFF SIDE   ======================================================
