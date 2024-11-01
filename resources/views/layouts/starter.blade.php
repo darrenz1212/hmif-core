@@ -172,7 +172,7 @@
         </div>
         <div class="app-content"> <!--begin::Container-->
             <div class="container-fluid"> <!-- Info boxes -->
-
+                @yield('main-content')
             </div> <!--end::Container-->
         </div> <!--end::App Content-->
     </main> <!--end::App Main--> <!--begin::Footer-->
