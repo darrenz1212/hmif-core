@@ -51,10 +51,8 @@ class HmifController extends Controller
             'waktu_peminjaman' => 'required',
         ]);
     
-        // Store the file in the public directory
         $filePath = $request->file('surat_peminjaman')->store('surat_peminjaman', 'public');
     
-        // Insert data into the database
         DB::table('peminjaman_ruangan')->insert([
             'id_ruangan' => $validatedData['id_ruangan'],
             'id_peminjam' => $validatedData['id_peminjam'],
