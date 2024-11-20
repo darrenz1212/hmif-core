@@ -26,6 +26,7 @@ Route::get('hmif/pengajuanRuangan', [HmifController::class, 'pengajuanRuangan'])
 Route::post('hmif/pengajuanRuangan', [HmifController::class, 'submitPengajuanRuangan'])->name('submitPengajuanRuangan');
 Route::get('/hmif/statusPemRuangan', [HmifController::class, 'statusPemRuangan'])->name('statusPemRuangan');
 Route::get('/hmif/ketersediaanRuangan', [HmifController::class, 'ketersediaanRuangan'])->name('ketersediaanRuangan');
+Route::get('/hmif/jadwalRuangan', [HmifController::class, 'index'])->name('jadwalRuangan');
 
 //====================================================== HMIF SIDE END ======================================================
 
