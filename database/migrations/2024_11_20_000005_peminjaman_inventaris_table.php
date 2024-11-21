@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePeminjamanInventarisTable extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('peminjaman_inventaris', function (Blueprint $table) {
@@ -23,5 +22,4 @@ class CreatePeminjamanInventarisTable extends Migration
     {
         Schema::dropIfExists('peminjaman_inventaris');
     }
-}
-
+};

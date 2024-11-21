@@ -21,6 +21,13 @@ class HmifController extends Controller
         return view('hmif.statusPemRuangan', ['peminjamanRuangan' => $peminjamanRuangan]);
     }
 
+    public function jadwalRuangan()
+    {
+        $jadwalRuangan = DB::table('jadwal_ruangan')->get();
+    
+        return view('hmif.jadwalRuangan', ['jadwalRuangan' => $jadwalRuangan]);
+    }
+
     public function ketersediaanRuangan()
     {
         $availableRooms = Ruangan::where('ketersediaan', 1)->get();

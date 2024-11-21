@@ -11,13 +11,16 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
+    public function run()
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        DB::table('users')->insert([
+            'name' => 'HMIF User',
+            'email' => 'hmif@example.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'), // Ganti dengan password yang diinginkan
+            'role' => 'hmif', // Tambahkan kolom 'role' di tabel jika belum ada
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

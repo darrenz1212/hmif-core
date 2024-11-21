@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInventarisTable extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('inventaris', function (Blueprint $table) {
@@ -19,4 +18,4 @@ class CreateInventarisTable extends Migration
     {
         Schema::dropIfExists('inventaris');
     }
-}
+};

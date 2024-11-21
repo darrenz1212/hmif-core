@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePeminjamanRuanganTable extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('peminjaman_ruangan', function (Blueprint $table) {
@@ -25,5 +24,4 @@ class CreatePeminjamanRuanganTable extends Migration
     {
         Schema::dropIfExists('peminjaman_ruangan');
     }
-}
-
+};
