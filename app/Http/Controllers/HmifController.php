@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Ruangan;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\RoomController;
 
 class HmifController extends Controller
 {
@@ -14,49 +15,28 @@ class HmifController extends Controller
         return view('hmif.dashboard');
     }
 
+//    Fetching status peminjaman from getStatusPeminjaman in PeminjamanController
     public function statusPemRuangan()
     {
-        $peminjamanRuangan = DB::table('peminjaman_ruangan')
-            ->select(
-                'peminjaman_ruangan.id_peminjaman_ruangan',
-                'peminjaman_ruangan.surat_peminjaman',
-                'peminjaman_ruangan.keterangan_peminjaman',
-                'peminjaman_ruangan.tanggal_peminjaman',
-                'peminjaman_ruangan.waktu_peminjaman',
-                'peminjaman_ruangan.status',
-                'users.name as nama_peminjam',
-                'ruangan.nama_ruangan'
-            )
-            ->join('users', 'peminjaman_ruangan.id_peminjam', '=', 'users.id')
-            ->join('ruangan', 'peminjaman_ruangan.id_ruangan', '=', 'ruangan.room_id')
-            ->get();
-
+        $peminjaman = new PeminjamanController();
+        $peminjamanRuangan = $peminjaman->getStatusPeminjaman();
 
         return view('hmif.statusPemRuangan', ['peminjamanRuangan' => $peminjamanRuangan]);
-
-//        dd($peminjamanRuangan);
     }
 
+//    Fetching jadwal Ruangan from getJadwalRuangan function in RoomController
     public function jadwalRuangan()
     {
-        $jadwalRuangan = DB::table('jadwal_ruangan')
-            ->join('ruangan', 'jadwal_ruangan.room_id', '=', 'ruangan.room_id')
-            ->select(
-                'jadwal_ruangan.*',
-                'ruangan.nama_ruangan'
-            )
-            ->get();
-
+        $roomController = new RoomController();
+        $jadwalRuangan = $roomController->getJadwalRuangan();
         return view('hmif.jadwalRuangan', ['jadwalRuangan' => $jadwalRuangan]);
-
-//        return dd($jadwalRuangan);
     }
 
-    public function ketersediaanRuangan()
-    {
-        $availableRooms = Ruangan::where('ketersediaan', 1)->get();
-        return view('hmif.ketersediaanRuangan', ['availableRooms' => $availableRooms]);
-    }
+//    public function ketersediaanRuangan()
+//    {
+//        $availableRooms = Ruangan::where('ketersediaan', 1)->get();
+//        return view('hmif.ketersediaanRuangan', ['availableRooms' => $availableRooms]);
+//    }
 
 
     public function pengajuanRuangan()
