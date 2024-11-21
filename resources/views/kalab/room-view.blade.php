@@ -1,14 +1,15 @@
 @extends('layouts.starter')
 
 @section('header-content')
+    <h3>Manajemen Ruangan</h3>
 @endsection
 
 @section('main-content')
-    <div class="container">
+    <div class="container mt-4">
         <!-- Tombol Tambah Ruangan -->
-{{--        <div class="mb-3">--}}
-{{--            <a href="{{ route('ruangan.create') }}" class="btn btn-primary">Tambah Ruangan</a>--}}
-{{--        </div>--}}
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoomModal">Tambah Ruangan</button>
+        </div>
 
         <!-- Tabel Data Ruangan -->
         <h2>Daftar Ruangan</h2>
@@ -18,7 +19,8 @@
                 <th>ID</th>
                 <th>Nama Ruangan</th>
                 <th>Kapasitas</th>
-                <th>Aksi</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -28,13 +30,21 @@
                     <td>{{ $room->nama_ruangan }}</td>
                     <td>{{ $room->kapasitas }} orang</td>
                     <td>
-                        <a href="" class="btn btn-warning btn-sm">Edit</a>
-{{--                        {{ route('ruangan.edit', $room->room_id) }}--}}
-                        <form action="" method="POST" style="display: inline;">
-{{--                            {{ route('ruangan.destroy', $room->room_id) }}--}}
+                        @if($room->ketersediaan == true)
+                            Available
+                        @else
+                            Unavailable
+                        @endif
+                    </td>
+                    <td>
+                        <!-- Tombol Edit -->
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editRoomModal{{ $room->room_id }}">Edit</button>
+
+                        <!-- Tombol Hapus -->
+                        <form action="{{ route('rooms.destroy', $room->room_id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus ruangan ini?')">Hapus</button>
                         </form>
                     </td>
                 </tr>
@@ -42,20 +52,72 @@
             </tbody>
         </table>
 
-        <!-- Formulir Edit Ruangan -->
-{{--        <h2>Edit Ruangan</h2>--}}
-{{--        <form action="{{ route('ruangan.update', $room->room_id ?? '') }}" method="POST">--}}
-{{--            @csrf--}}
-{{--            @method('PUT')--}}
-{{--            <div class="mb-3">--}}
-{{--                <label for="nama_ruangan" class="form-label">Nama Ruangan</label>--}}
-{{--                <input type="text" class="form-control" id="nama_ruangan" name="nama_ruangan" value="{{ $room->nama_ruangan ?? '' }}" required>--}}
-{{--            </div>--}}
-{{--            <div class="mb-3">--}}
-{{--                <label for="kapasitas" class="form-label">Kapasitas</label>--}}
-{{--                <input type="number" class="form-control" id="kapasitas" name="kapasitas" value="{{ $room->kapasitas ?? '' }}" required>--}}
-{{--            </div>--}}
-{{--            <button type="submit" class="btn btn-success">Simpan Perubahan</button>--}}
-{{--        </form>--}}
+        <!-- Modal Tambah Ruangan -->
+        <div class="modal fade" id="addRoomModal" tabindex="-1" aria-labelledby="addRoomModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('rooms.store') }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addRoomModalLabel">Tambah Ruangan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="nama_ruangan" class="form-label">Nama Ruangan</label>
+                                <input type="text" class="form-control" name="nama_ruangan" id="nama_ruangan" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="kapasitas" class="form-label">Kapasitas</label>
+                                <input type="number" class="form-control" name="kapasitas" id="kapasitas" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Edit Ruangan -->
+        @foreach($ruangan as $room)
+            <div class="modal fade" id="editRoomModal{{ $room->room_id }}" tabindex="-1" aria-labelledby="editRoomModalLabel{{ $room->room_id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="{{ route('rooms.update', $room->room_id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editRoomModalLabel{{ $room->room_id }}">Edit Ruangan</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="nama_ruangan{{ $room->room_id }}" class="form-label">Nama Ruangan</label>
+                                    <input type="text" class="form-control" name="nama_ruangan" id="nama_ruangan{{ $room->room_id }}" value="{{ $room->nama_ruangan }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="kapasitas{{ $room->room_id }}" class="form-label">Kapasitas</label>
+                                    <input type="number" class="form-control" name="kapasitas" id="kapasitas{{ $room->room_id }}" value="{{ $room->kapasitas }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ketersediaan{{ $room->room_id }}" class="form-label">Ketersediaan</label>
+                                    <select class="form-control" name="ketersediaan" id="ketersediaan{{ $room->room_id }}">
+                                        <option value="1" {{ $room->ketersediaan == 1 ? 'selected' : '' }}>Available</option>
+                                        <option value="0" {{ $room->ketersediaan == 0 ? 'selected' : '' }}>Unavailable</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endforeach
     </div>
 @endsection
