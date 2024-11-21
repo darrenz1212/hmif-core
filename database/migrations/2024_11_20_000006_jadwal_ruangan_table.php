@@ -9,8 +9,8 @@ return new class extends Migration {
     {
         Schema::create('jadwal_ruangan', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_ruangan')->unsigned();
-            $table->foreign('id_ruangan')->references('room_id')->on('ruangan');
+            $table->integer('room_id')->unsigned();
+            $table->foreign('room_id')->references('room_id')->on('ruangan');
             $table->date('tanggal');
             $table->time('jam_mulai');
             $table->time('jam_selesai');

@@ -28,4 +28,9 @@ class PeminjamanRuangan extends Model
     {
         return $this->belongsTo(Ruangan::class, 'id_ruangan', 'room_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'id_peminjam','id_peminjam');
+    }
 }

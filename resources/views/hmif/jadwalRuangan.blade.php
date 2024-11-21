@@ -22,7 +22,7 @@
                 @foreach($jadwalRuangan as $jadwal)
                     <tr>
                         <td>{{ $jadwal->id }}</td>
-                        <td>{{ $jadwal->ruangan->nama_ruangan }}</td> <!-- Mengambil nama ruangan melalui relasi -->
+                        <td>{{ $jadwal->nama_ruangan }}</td> <!-- Mengambil nama ruangan melalui relasi -->
                         <td>{{ $jadwal->tanggal }}</td>
                         <td>{{ $jadwal->jam_mulai }}</td>
                         <td>{{ $jadwal->jam_selesai }}</td>

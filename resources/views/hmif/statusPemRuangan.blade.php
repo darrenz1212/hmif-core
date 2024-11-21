@@ -23,9 +23,9 @@
             <tbody>
                 @foreach($peminjamanRuangan as $peminjaman)
                     <tr>
-                        <td>{{ $peminjaman->id_peminjaman_ruangan }}</td> <!-- Use id_peminjaman_ruangan instead of id -->
-                        <td>{{ $peminjaman->id_ruangan }}</td> <!-- Assuming room name is stored as an ID -->
-                        <td>{{ $peminjaman->id_peminjam }}</td> <!-- Assuming borrower name is stored as an ID -->
+                        <td>{{ $peminjaman->id_peminjaman_ruangan }}</td>
+                        <td>{{ $peminjaman->nama_ruangan }}</td>
+                        <td>{{ $peminjaman->nama_peminjam }}</td>
                         <td><a href="{{ Storage::url($peminjaman->surat_peminjaman) }}" target="_blank">View PDF</a></td>
                         <td>{{ $peminjaman->keterangan_peminjaman }}</td>
                         <td>{{ $peminjaman->tanggal_peminjaman }}</td>
