@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class RoomController extends Controller
 {
 
-    private function getAllRoom()
+    public function getAllRoom()
     {
         $ruangan = Ruangan::all();
 
@@ -37,7 +37,6 @@ class RoomController extends Controller
         ]);
     }
 
-    //    Not Tested yet
     public function showRoomKalab()
     {
         $ruangan = $this->getAllRoom();
@@ -46,14 +45,6 @@ class RoomController extends Controller
         ]);
     }
 
-//    public function showAllRoom()
-//    {
-//        $ruangan = Ruangan::all();
-//
-//        return view('kalab.room-view', [
-//            'ruangan'=> $ruangan
-//        ]);
-//    }
 
 //  Fetch all jadwal ruangan data from DB
 //  Used in :
@@ -74,10 +65,10 @@ class RoomController extends Controller
 //    Finding room information
     public function getRoomInfo($id)
     {
-        // Cari ruangan berdasarkan ID
+
         $ruangan = Ruangan::with('fasilitas')->findOrFail($id);
 
-        // Return data dalam bentuk JSON
+
         return response()->json([
             'nama_ruangan' => $ruangan->nama_ruangan,
             'kapasitas' => $ruangan->kapasitas,
@@ -89,4 +80,6 @@ class RoomController extends Controller
             }),
         ]);
     }
+
+
 }

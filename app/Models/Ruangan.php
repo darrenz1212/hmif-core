@@ -13,9 +13,11 @@ class Ruangan extends Model
 
     protected $primaryKey = 'room_id';
 
+    public $timestamps = false;
     protected $fillable = [
         'nama_ruangan',
         'kapasitas',
+        'ketersediaan'
     ];
 
     public function fasilitas()
