@@ -10,7 +10,6 @@
         <table class="table table-bordered table-striped mt-3">
             <thead>
                 <tr>
-                    <th>ID Peminjaman</th>
                     <th>Nama Ruangan</th>
                     <th>Nama Peminjam</th>
                     <th>Surat Peminjaman</th>
@@ -23,7 +22,6 @@
             <tbody>
                 @foreach($peminjamanRuangan as $peminjaman)
                     <tr>
-                        <td>{{ $peminjaman->id_peminjaman_ruangan }}</td>
                         <td>{{ $peminjaman->nama_ruangan }}</td>
                         <td>{{ $peminjaman->nama_peminjam }}</td>
                         <td><a href="{{ Storage::url($peminjaman->surat_peminjaman) }}" target="_blank">View PDF</a></td>

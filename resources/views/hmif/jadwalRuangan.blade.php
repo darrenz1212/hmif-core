@@ -10,7 +10,6 @@
         <table class="table table-bordered table-striped mt-3">
             <thead>
                 <tr>
-                    <th>ID Jadwal</th>
                     <th>Nama Ruangan</th>
                     <th>Tanggal</th>
                     <th>Jam Mulai</th>
@@ -21,7 +20,6 @@
             <tbody>
                 @foreach($jadwalRuangan as $jadwal)
                     <tr>
-                        <td>{{ $jadwal->id }}</td>
                         <td>{{ $jadwal->nama_ruangan }}</td> <!-- Mengambil nama ruangan melalui relasi -->
                         <td>{{ $jadwal->tanggal }}</td>
                         <td>{{ $jadwal->jam_mulai }}</td>
