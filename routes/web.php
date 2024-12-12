@@ -38,6 +38,10 @@ Route::get('/hmif/statusPemRuangan', [HmifController::class, 'statusPemRuangan']
 Route::get('/hmif/ketersediaanRuangan', [RoomController::class,'showRoomHima'])->name('ketersediaanRuangan');
 Route::get('/hmif/ketersediaanRuangan/{id}/info', [RoomController::class, 'getRoomInfo'])->name('ruangan.info');
 Route::get('/hmif/jadwalRuangan', [HmifController::class, 'jadwalRuangan'])->name('jadwalRuangan');
+
+Route::get('/hmif/api/jadwalRuangan', [HmifController::class, 'getJadwalRuangan'])->name('api.jadwalRuangan');
+Route::get('/hmif/api/ruangan', [HmifController::class, 'getRuangan'])->name('api.ruangan');
+Route::get('/hmif/api/jadwalRuanganByRoom', [HmifController::class, 'getJadwalRuanganByRoom'])->name('api.jadwalRuanganByRoom');
 //====================================================== HMIF SIDE END ======================================================
 
 
