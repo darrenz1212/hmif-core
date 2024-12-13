@@ -55,6 +55,7 @@ class RoomController extends Controller
             ->join('ruangan', 'jadwal_ruangan.room_id', '=', 'ruangan.room_id')
             ->select(
                 'jadwal_ruangan.id',
+                'jadwal_ruangan.room_id',
                 'jadwal_ruangan.tanggal',
                 'jadwal_ruangan.jam_mulai',
                 'jadwal_ruangan.jam_selesai',
@@ -65,6 +66,7 @@ class RoomController extends Controller
             ->map(function ($item) {
                 return [
                     'id' => $item->id,
+                    'room_id' => $item->room_id,
                     'title' => $item->keterangan,
                     'start' => $item->tanggal . 'T' . $item->jam_mulai,
                     'end' => $item->tanggal . 'T' . $item->jam_selesai,
@@ -73,6 +75,8 @@ class RoomController extends Controller
             });
 
         return $jadwalRuangan;
+
+//        return dd($jadwalRuangan);
     }
 
 //    Finding room information

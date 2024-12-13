@@ -55,4 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//======================================================   Debugging Station (if necessary)   ======================================================
+Route::get('/debug',[RoomController::class, 'getJadwalRuangan'])->name('debug');
+
 require __DIR__.'/auth.php';

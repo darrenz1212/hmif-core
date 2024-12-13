@@ -51,19 +51,17 @@ class HmifController extends Controller
 
     public function getJadwalRuanganByRoom(Request $request)
     {
-        $roomId = $request->query('room_id'); // Ambil room_id dari query parameter
+        $roomId = $request->query('room_id');
 
         $roomController = new RoomController();
         $jadwalRuangan = $roomController->getJadwalRuangan();
-
-        // Filter jadwal berdasarkan room_id
         if ($roomId) {
-            $jadwalRuangan = $jadwalRuangan->filter(function ($item) use ($roomId) {
-                return $item['room_id'] == $roomId; // Cocokkan room_id
+            $jadwalRuanganItem = $jadwalRuangan->filter(function ($item) use ($roomId) {
+                return $item['room_id'] == $roomId;
             });
         }
 
-        return response()->json($jadwalRuangan->values());
+        return response()->json($jadwalRuanganItem->values());
     }
 
 
