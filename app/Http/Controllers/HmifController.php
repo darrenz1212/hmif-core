@@ -27,16 +27,43 @@ class HmifController extends Controller
 //    Fetching jadwal Ruangan from getJadwalRuangan function in RoomController
     public function jadwalRuangan()
     {
-        $roomController = new RoomController();
-        $jadwalRuangan = $roomController->getJadwalRuangan();
-        return view('hmif.jadwalRuangan', ['jadwalRuangan' => $jadwalRuangan]);
+        // Render halaman kalender
+        return view('hmif.jadwalRuangan');
     }
 
-//    public function ketersediaanRuangan()
-//    {
-//        $availableRooms = Ruangan::where('ketersediaan', 1)->get();
-//        return view('hmif.ketersediaanRuangan', ['availableRooms' => $availableRooms]);
-//    }
+    public function getJadwalRuangan()
+    {
+        // Ambil data jadwal dari RoomController
+        $roomController = new RoomController();
+        $jadwalRuangan = $roomController->getJadwalRuangan();
+
+        // Kembalikan data dalam format JSON untuk FullCalendar
+        return response()->json($jadwalRuangan);
+    }
+
+    public function getRuangan()
+    {
+        $getRuangan = new RoomController();
+        $ruangan = $getRuangan ->getAllRoom();
+
+        return response()->json($ruangan);
+    }
+
+    public function getJadwalRuanganByRoom(Request $request)
+    {
+        $roomId = $request->query('room_id');
+
+        $roomController = new RoomController();
+        $jadwalRuangan = $roomController->getJadwalRuangan();
+        if ($roomId) {
+            $jadwalRuanganItem = $jadwalRuangan->filter(function ($item) use ($roomId) {
+                return $item['room_id'] == $roomId;
+            });
+        }
+
+        return response()->json($jadwalRuanganItem->values());
+    }
+
 
 
     public function pengajuanRuangan()
