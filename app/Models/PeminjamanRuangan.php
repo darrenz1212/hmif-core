@@ -18,6 +18,8 @@ class PeminjamanRuangan extends Model
         'keterangan_peminjaman',
         'tanggal_peminjaman',
         'waktu_peminjaman',
+        'batas_tanggal',
+        'batas_waktu',
         'status',
     ];
 
@@ -29,8 +31,24 @@ class PeminjamanRuangan extends Model
         return $this->belongsTo(Ruangan::class, 'id_ruangan', 'room_id');
     }
 
+    /**
+     * Relasi ke model User (satu peminjaman memiliki satu peminjam)
+     */
     public function user()
     {
-        return $this->belongsTo(User::class,'id_peminjam','id_peminjam');
+        return $this->belongsTo(User::class, 'id_peminjam', 'id');
+    }
+
+    /**
+     * Scope untuk memeriksa apakah ruangan sedang digunakan dalam rentang waktu tertentu
+     */
+    public function scopeIsBooked($query, $tanggal_peminjaman, $waktu_peminjaman, $tanggal_batas, $waktu_batas)
+    {
+        return $query->where(function ($q) use ($tanggal_peminjaman, $waktu_peminjaman, $tanggal_batas, $waktu_batas) {
+            $q->whereDate('tanggal_peminjaman', '<=', $tanggal_batas)
+              ->whereDate('batas_tanggal', '>=', $tanggal_peminjaman)
+              ->whereTime('waktu_peminjaman', '<=', $waktu_batas)
+              ->whereTime('batas_waktu', '>=', $waktu_peminjaman);
+        });
     }
 }

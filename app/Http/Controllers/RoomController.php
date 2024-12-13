@@ -16,6 +16,42 @@ class RoomController extends Controller
         return $ruangan;
     }
 
+    public function getAvailableRooms(Request $request)
+    {
+        $tanggalPeminjaman = $request->tanggal_peminjaman;
+        $waktuPeminjaman = $request->waktu_peminjaman;
+        $tanggalBatas = $request->tanggal_batas;
+        $waktuBatas = $request->waktu_batas;
+    
+        $bookedRoomIds = DB::table('peminjaman_ruangan')
+            ->select('id_ruangan')
+            ->where(function ($q) use ($tanggalPeminjaman, $waktuPeminjaman, $tanggalBatas, $waktuBatas) {
+                $q->where(function ($subQuery) use ($tanggalPeminjaman, $waktuPeminjaman, $waktuBatas) {
+                    $subQuery->whereDate('tanggal_peminjaman', '=', $tanggalPeminjaman)
+                        ->whereTime('waktu_peminjaman', '<=', $waktuBatas)
+                        ->whereTime('batas_waktu', '>=', $waktuPeminjaman);
+                })
+                ->orWhere(function ($subQuery) use ($tanggalPeminjaman, $tanggalBatas) {
+                    $subQuery->whereDate('tanggal_peminjaman', '<=', $tanggalBatas)
+                        ->whereDate('batas_tanggal', '>=', $tanggalPeminjaman);
+                });
+            })
+            ->pluck('id_ruangan'); 
+    
+        \Log::info("Booked Room IDs:", ['bookedRoomIds' => $bookedRoomIds]);
+    
+        $availableRooms = DB::table('ruangan')
+            ->whereNotIn('room_id', $bookedRoomIds)
+            ->get();
+    
+        \Log::info("Filtered Available Rooms:", ['availableRooms' => $availableRooms]);
+    
+        return view('hmif.ketersediaanRuangan', [
+            'availableRooms' => $availableRooms,
+            'requestData' => $request->all(),
+        ]);
+    }
+    
     public function showRoomHima()
     {
         $ruangan = $this->getAllRoom();
@@ -33,7 +69,7 @@ class RoomController extends Controller
     public function showRoomStaff()
     {
         return view('staff.ketersediaanRuangan',[
-            'ruangan' => $this->$ruangan
+            // 'ruangan' => $this->$ruangan
         ]);
     }
 
