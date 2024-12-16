@@ -42,7 +42,19 @@ Route::get('/hmif/jadwalRuangan', [HmifController::class, 'jadwalRuangan'])->nam
 
 
 //======================================================   STAFF SIDE   ======================================================
-Route::get('staff-dash',[StaffController::class,'index'])->name('staff-dashboard');
+Route::get('/stafflab/dashboard',[StaffController::class,'index'])->name('stafflab-dashboard');
+
+Route::get('/stafflab/roomsFacilities', [StaffController::class, 'showAllRoomFacilities'])->name('stafflab.roomFacilities');
+Route::get('/stafflab/roomsFacilities/{id}/edit', [StaffController::class, 'editRoomFacilities'])->name('stafflab.editFacilities');
+Route::put('/stafflab/roomsFacilities/{id}', [StaffController::class, 'updateRoomFacilities'])->name('stafflab.updateFacilities');
+
+Route::get('/stafflab/rooms', [StaffController::class, 'showAllRoom'])->name('stafflab.rooms');
+Route::post('/stafflab/rooms', [StaffController::class, 'storeRooms'])->name('stafflab.storeRooms');
+Route::put('/stafflab/rooms/{id}', [StaffController::class, 'updateRooms'])->name('stafflab.updateRooms');
+
+Route::get('/stafflab/inventory', [StaffController::class, 'inventory'])->name('stafflab.inventory');
+Route::post('/stafflab/store', [StaffController::class, 'storeInventory'])->name('stafflab.storeInventory');
+Route::put('/stafflab/update', [StaffController::class, 'updateInventory'])->name('stafflab.updateInventory');
 //====================================================== STAFF SIDE END ======================================================
 
 Route::middleware('auth')->group(function () {
