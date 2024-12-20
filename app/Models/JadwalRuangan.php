@@ -11,8 +11,10 @@ class JadwalRuangan extends Model
 
     protected $table = 'jadwal_ruangan'; // Menyesuaikan nama tabel
 
+    public $timestamps = false;
+
     protected $fillable = [
-        'id_ruangan',
+        'room_id',
         'tanggal',
         'jam_mulai',
         'jam_selesai',
