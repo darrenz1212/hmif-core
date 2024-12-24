@@ -43,6 +43,7 @@ class HmifController extends Controller
 
     public function submitPengajuanRuangan(Request $request)
     {
+        // Validasi data dari form
         $validatedData = $request->validate([
             'tanggal_peminjaman' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i',
@@ -53,19 +54,21 @@ class HmifController extends Controller
             'keterangan_peminjaman' => 'nullable|string|max:255',
         ]);
     
+        // Simpan file surat peminjaman
         $filePath = $request->file('surat_peminjaman')->store('surat_peminjaman', 'public');
     
-        // Insert data into the `jadwal_ruangan` table
-        JadwalRuangan::create([
-            'room_id' => $validatedData['id_ruangan'],
-            'tanggal' => $validatedData['tanggal_peminjaman'],
+        // Simpan data ke tabel `peminjaman_ruangan`
+        DB::table('peminjaman_ruangan')->insert([
+            'id_ruangan' => $validatedData['id_ruangan'],
+            'id_peminjam' => $validatedData['id_peminjam'],
+            'tanggal_peminjaman' => $validatedData['tanggal_peminjaman'],
             'jam_mulai' => $validatedData['jam_mulai'],
             'jam_selesai' => $validatedData['jam_selesai'],
-            'keterangan' => $validatedData['keterangan_peminjaman'],
+            'surat_peminjaman' => $filePath,
+            'keterangan_peminjaman' => $validatedData['keterangan_peminjaman'],
+            'status' => 'sedang diajukan'
         ]);
     
-        return redirect()->back()->with('success', 'Pengajuan ruangan berhasil disimpan.');
+        return redirect()->route('statusPemRuangan')->with('success', 'Pengajuan ruangan berhasil disimpan');
     }
-    
-
 }
