@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Ruangan;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\RoomController;
+use App\Models\JadwalRuangan;
 
 class HmifController extends Controller
 {
@@ -15,7 +15,7 @@ class HmifController extends Controller
         return view('hmif.dashboard');
     }
 
-//    Fetching status peminjaman from getStatusPeminjaman in PeminjamanController
+    // Fetching status peminjaman from PeminjamanController
     public function statusPemRuangan()
     {
         $peminjaman = new PeminjamanController();
@@ -24,7 +24,7 @@ class HmifController extends Controller
         return view('hmif.statusPemRuangan', ['peminjamanRuangan' => $peminjamanRuangan]);
     }
 
-//    Fetching jadwal Ruangan from getJadwalRuangan function in RoomController
+    // Fetching jadwal Ruangan from RoomController
     public function jadwalRuangan()
     {
         $roomController = new RoomController();
@@ -32,52 +32,43 @@ class HmifController extends Controller
         return view('hmif.jadwalRuangan', ['jadwalRuangan' => $jadwalRuangan]);
     }
 
-//    public function ketersediaanRuangan()
-//    {
-//        $availableRooms = Ruangan::where('ketersediaan', 1)->get();
-//        return view('hmif.ketersediaanRuangan', ['availableRooms' => $availableRooms]);
-//    }
-
-
     public function pengajuanRuangan()
     {
-        $ruanganList = Ruangan::where('ketersediaan', 1)->get();
-
         $userList = User::all();
 
         return view('hmif.pengajuanRuangan', [
-            'ruanganList' => $ruanganList,
             'userList' => $userList,
         ]);
     }
 
     public function submitPengajuanRuangan(Request $request)
     {
+        // Validasi data dari form
         $validatedData = $request->validate([
-            'id_ruangan' => 'required|integer',
-            'id_peminjam' => 'required|integer',
+            'tanggal_peminjaman' => 'required|date',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            'id_ruangan' => 'required|integer|exists:ruangan,room_id',
+            'id_peminjam' => 'required|integer|exists:users,id',
             'surat_peminjaman' => 'required|file|mimes:pdf|max:2048',
             'keterangan_peminjaman' => 'nullable|string|max:255',
-            'tanggal_peminjaman' => 'required|date',
-            'waktu_peminjaman' => 'required',
         ]);
-
+    
+        // Simpan file surat peminjaman
         $filePath = $request->file('surat_peminjaman')->store('surat_peminjaman', 'public');
-
-        // Insert data into the database
+    
+        // Simpan data ke tabel `peminjaman_ruangan`
         DB::table('peminjaman_ruangan')->insert([
             'id_ruangan' => $validatedData['id_ruangan'],
             'id_peminjam' => $validatedData['id_peminjam'],
+            'tanggal_peminjaman' => $validatedData['tanggal_peminjaman'],
+            'jam_mulai' => $validatedData['jam_mulai'],
+            'jam_selesai' => $validatedData['jam_selesai'],
             'surat_peminjaman' => $filePath,
             'keterangan_peminjaman' => $validatedData['keterangan_peminjaman'],
-            'tanggal_peminjaman' => $validatedData['tanggal_peminjaman'],
-            'waktu_peminjaman' => $validatedData['waktu_peminjaman'],
-            'status' => 'sedang diajukan',
+            'status' => 'sedang diajukan'
         ]);
-
-        return redirect()->back()->with('success', 'Pengajuan ruangan berhasil disimpan.');
+    
+        return redirect()->route('statusPemRuangan')->with('success', 'Pengajuan ruangan berhasil disimpan');
     }
-
-
-
 }

@@ -19,7 +19,8 @@ class PeminjamanController extends Controller
                 'peminjaman_ruangan.surat_peminjaman',
                 'peminjaman_ruangan.keterangan_peminjaman',
                 'peminjaman_ruangan.tanggal_peminjaman',
-                'peminjaman_ruangan.waktu_peminjaman',
+                'peminjaman_ruangan.jam_mulai',
+                'peminjaman_ruangan.jam_selesai',
                 'peminjaman_ruangan.status',
                 'users.name as nama_peminjam',
                 'ruangan.nama_ruangan'
@@ -28,7 +29,7 @@ class PeminjamanController extends Controller
             ->join('ruangan', 'peminjaman_ruangan.id_ruangan', '=', 'ruangan.room_id')
             ->get();
 
-
         return $peminjamanRuangan;
     }
+
 }
