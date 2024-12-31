@@ -163,6 +163,14 @@
 
                     </li>
                 </ul> <!--end::Sidebar Menu-->
+                <div class="sidebar-footer text-center mt-3 p-2">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-danger w-75">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </button>
+                    </form>
+                </div>
             </nav>
         </div> <!--end::Sidebar Wrapper-->
     </aside> <!--end::Sidebar--> <!--begin::App Main-->
