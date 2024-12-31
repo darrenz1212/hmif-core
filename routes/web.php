@@ -39,6 +39,11 @@ Route::post('/hmif/ketersediaanRuangan', [RoomController::class, 'getAvailableRo
 
 Route::get('/hmif/ketersediaanRuangan/{id}/info', [RoomController::class, 'getRoomInfo'])->name('ruangan.info');
 Route::get('/hmif/jadwalRuangan', [HmifController::class, 'jadwalRuangan'])->name('jadwalRuangan');
+
+Route::get('/hmif/api/jadwalRuangan',[HmifController::class, 'getJadwalRuangan'])->name('api.jadwalRuangan');
+Route::get('/hmif/api/ruangan', [HmifController::class, 'getRuangan'])->name('api.ruangan');
+Route::get('/hmif/api/jadwalRuanganByRoom', [HmifController::class, 'getJadwalRuanganByRoom'])->name('api.jadwalRuanganByRoom');
+
 //====================================================== HMIF SIDE END ======================================================
 
 
@@ -57,6 +62,9 @@ Route::get('/stafflab/inventory', [StaffController::class, 'inventory'])->name('
 Route::post('/stafflab/store', [StaffController::class, 'storeInventory'])->name('stafflab.storeInventory');
 Route::put('/stafflab/update', [StaffController::class, 'updateInventory'])->name('stafflab.updateInventory');
 //====================================================== STAFF SIDE END ======================================================
+
+//====================================================== Debugging Session ======================================================
+Route::get('/debug/api/jadwalRuanganByRoom/{roomId}',[HmifController::class, 'getJadwalRuanganByRoom'])->name('debug.jadwalRuangan');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

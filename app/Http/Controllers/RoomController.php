@@ -58,7 +58,7 @@ public function getAvailableRooms(Request $request)
     ]);
 }
 
-    
+
     public function showRoomHima()
     {
         $ruangan = $this->getAllRoom();
@@ -92,17 +92,34 @@ public function getAvailableRooms(Request $request)
 //  Fetch all jadwal ruangan data from DB
 //  Used in :
 //  HmifController jadwalRuangan()
-   public function getJadwalRuangan()
+    public function getJadwalRuangan()
     {
         $jadwalRuangan = DB::table('jadwal_ruangan')
             ->join('ruangan', 'jadwal_ruangan.room_id', '=', 'ruangan.room_id')
             ->select(
-                'jadwal_ruangan.*',
+                'jadwal_ruangan.id',
+                'jadwal_ruangan.room_id',
+                'jadwal_ruangan.tanggal',
+                'jadwal_ruangan.jam_mulai',
+                'jadwal_ruangan.jam_selesai',
+                'jadwal_ruangan.keterangan',
                 'ruangan.nama_ruangan'
             )
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'room_id' => $item->room_id,
+                    'title' => $item->keterangan,
+                    'start' => $item->tanggal . 'T' . $item->jam_mulai,
+                    'end' => $item->tanggal . 'T' . $item->jam_selesai,
+                    'description' => $item->nama_ruangan,
+                ];
+            });
 
         return $jadwalRuangan;
+
+//        return dd($jadwalRuangan);
     }
 
 //    Finding room information
