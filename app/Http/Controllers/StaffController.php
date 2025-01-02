@@ -18,6 +18,8 @@ class StaffController extends Controller
     {
         $ruangan = Ruangan::with('fasilitas')->get();
         return view('stafflab.roomFacilities', compact('ruangan'));
+
+//        dd($ruangan[0]->fasilitas[0]->nama_barang);
     }
 
     public function editRoomFacilities($id)
@@ -44,7 +46,7 @@ class StaffController extends Controller
 
         return redirect()->route('stafflab.rooms')->with('success', 'Fasilitas ruangan berhasil diperbarui.');
     }
-    
+
     public function showAllRoom()
     {
         $ruangan = Ruangan::All();
@@ -54,15 +56,8 @@ class StaffController extends Controller
     // Menyimpan ruangan baru
     public function storeRooms(Request $request)
     {
-        $request->validate([
-            'nama_ruangan' => 'required|string|max:255',
-            'kapasitas' => 'required|integer|min:1',
-        ]);
-
-        Ruangan::create([
-            'nama_ruangan' => $request->nama_ruangan,
-            'kapasitas' => $request->kapasitas,
-        ]);
+        $roomController = new RoomController();
+        $roomController ->storeRoom($request);
 
         return redirect()->route('stafflab.rooms')->with('success', 'Ruangan berhasil ditambahkan.');
     }
@@ -92,30 +87,16 @@ class StaffController extends Controller
 
     public function storeInventory(Request $request)
     {
-        $request->validate([
-            'nama_barang' => 'required|string|max:255',
-            'kondisi' => 'required|string|in:Baik,Rusak',
-        ]);
+        $inventorController = new InventoryController();
+        $inventorController->store($request);
 
-        Inventaris::create($request->only(['nama_barang', 'kondisi']));
         return redirect()->route('stafflab.inventory')->with('success', 'Data inventaris berhasil ditambahkan!');
     }
 
     public function updateInventory(Request $request)
     {
-        $request->validate([
-            'id_inventaris' => 'required|exists:inventaris,id_inventaris',
-            'kondisi' => 'required|string|in:Baik,Rusak', // Hanya validasi untuk kondisi
-        ]);
-
-        // Cari inventaris berdasarkan ID
-        $inventaris = Inventaris::findOrFail($request->id_inventaris);
-
-        // Perbarui hanya kondisi
-        $inventaris->update([
-            'kondisi' => $request->kondisi,
-        ]);
-
+        $inventorController = new InventoryController();
+        $inventorController->update($request);
         return redirect()->route('stafflab.inventory')->with('success', 'Kondisi barang berhasil diperbarui!');
     }
 }

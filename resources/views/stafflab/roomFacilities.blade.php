@@ -12,7 +12,7 @@
                 <tr>
                     <th>Nama Ruangan</th>
                     <th>Kapasitas</th>
-                    <th>Fasilitas</th>
+{{--                    <th>Fasilitas</th>--}}
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -21,19 +21,19 @@
                     <tr>
                         <td>{{ $room->nama_ruangan }}</td>
                         <td>{{ $room->kapasitas }}</td>
+{{--                        <td>--}}
+{{--                            @if($room->fasilitas->isNotEmpty())--}}
+{{--                                <ul>--}}
+{{--                                    @foreach($room->fasilitas as $fasilitas)--}}
+{{--                                        <li>{{ $fasilitas->nama_barang }}</li>--}}
+{{--                                    @endforeach--}}
+{{--                                </ul>--}}
+{{--                            @else--}}
+{{--                                <span>Tidak ada fasilitas</span>--}}
+{{--                            @endif--}}
+{{--                        </td>--}}
                         <td>
-                            @if($room->fasilitas->isNotEmpty())
-                                <ul>
-                                    @foreach($room->fasilitas as $fasilitas)
-                                        <li>{{ $fasilitas->nama_barang }}</li>
-                                    @endforeach
-                                </ul>
-                            @else
-                                <span>Tidak ada fasilitas</span>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('stafflab.editFacilities', $room->room_id) }}" class="btn btn-sm btn-warning">Edit Fasilitas</a>
+                            <a href="{{ route('stafflab.editFacilities', $room->room_id) }}" class="btn btn-sm btn-warning">Lihat Fasilitas</a>
                         </td>
                     </tr>
                 @endforeach
