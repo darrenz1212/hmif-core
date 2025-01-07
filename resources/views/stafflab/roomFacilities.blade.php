@@ -8,19 +8,12 @@
     <div class="container mt-4">
         <h4>Daftar Ruangan</h4>
         <table class="table table-bordered table-striped mt-3">
-            <thead>
-                <tr>
-                    <th>Nama Ruangan</th>
-                    <th>Kapasitas</th>
-{{--                    <th>Fasilitas</th>--}}
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+
             <tbody>
                 @foreach($ruangan as $room)
                     <tr>
                         <td>{{ $room->nama_ruangan }}</td>
-                        <td>{{ $room->kapasitas }}</td>
+{{--                        <td>{{ $room->kapasitas }}</td>--}}
 {{--                        <td>--}}
 {{--                            @if($room->fasilitas->isNotEmpty())--}}
 {{--                                <ul>--}}
@@ -33,7 +26,10 @@
 {{--                            @endif--}}
 {{--                        </td>--}}
                         <td>
-                            <a href="{{ route('stafflab.editFacilities', $room->room_id) }}" class="btn btn-sm btn-warning">Lihat Fasilitas</a>
+                            <center>
+                                <a href="{{ route('stafflab.editFacilities', $room->room_id) }}" class="btn btn-sm btn-warning">Lihat Fasilitas</a>
+                            </center>
+
                         </td>
                     </tr>
                 @endforeach
