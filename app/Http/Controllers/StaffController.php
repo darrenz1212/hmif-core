@@ -22,6 +22,14 @@ class StaffController extends Controller
 //        dd($ruangan[0]->fasilitas[0]->nama_barang);
     }
 
+
+    public function storeFacility(Request $request, $roomId)
+    {
+        $facilityController = new FacilityController();
+        $facilityController->store($request, $roomId);
+
+        return redirect()->route('stafflab.editFacilities', $roomId)->with('success', 'Fasilitas berhasil ditambahkan.');
+    }
     public function editRoomFacilities($id)
     {
         $room = Ruangan::with('fasilitas')->findOrFail($id);
@@ -30,21 +38,14 @@ class StaffController extends Controller
 
     public function updateRoomFacilities(Request $request, $id)
     {
-        $room = Ruangan::findOrFail($id);
+        $facilityController = new FacilityController();
+        $facilityController->update($request, $id);
 
-        // Validasi input
-        $request->validate([
-            'fasilitas' => 'required|array',
-            'fasilitas.*' => 'string|max:255',
-        ]);
+        $fasilitas = Fasilitas::findOrFail($id);
+        $roomId = $fasilitas->id_ruangan;
 
-        // Hapus fasilitas lama dan tambahkan fasilitas baru
-        $room->fasilitas()->delete();
-        foreach ($request->fasilitas as $namaBarang) {
-            $room->fasilitas()->create(['nama_barang' => $namaBarang]);
-        }
-
-        return redirect()->route('stafflab.rooms')->with('success', 'Fasilitas ruangan berhasil diperbarui.');
+        return redirect()->route('stafflab.editFacilities', $roomId)
+            ->with('success', 'Fasilitas ruangan berhasil diperbarui.');
     }
 
     public function showAllRoom()
@@ -92,11 +93,10 @@ class StaffController extends Controller
 
         return redirect()->route('stafflab.inventory')->with('success', 'Data inventaris berhasil ditambahkan!');
     }
-
-    public function updateInventory(Request $request)
+    public function updateInventory(Request $request, $id)
     {
         $inventorController = new InventoryController();
-        $inventorController->update($request);
+        $inventorController->update($request,$id);
         return redirect()->route('stafflab.inventory')->with('success', 'Kondisi barang berhasil diperbarui!');
     }
 }

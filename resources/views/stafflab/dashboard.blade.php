@@ -1,10 +1,16 @@
 @extends('layouts.starter')
 
 @section('header-content')
+    <h3>Halo Staff Lab</h3>
 @endsection
 
 @section('main-content')
-    <div class="container mt-4 d-flex justify-content-center align-items-center" style="height: 40vh;">
-        <h1 class="display-1">Selamat Datang di LabCore, {{ Auth::user()->name }}!</h1>
+    <div class="container mt-4">
+        <h1>Halo, {{ Auth::user()->name }}</h1>
+
+        <!-- Buttons -->
+        <a href="{{ route('stafflab.roomFacilities') }}" class="btn btn-primary">Data Fasilitas Ruangan</a>
+        <a href="{{ route('stafflab.rooms') }}" class="btn btn-primary mr-2">Data Ruangan</a>
+        <a href="{{ route('stafflab.inventory') }}" class="btn btn-primary mr-2">Data Inventaris</a>
     </div>
 @endsection
