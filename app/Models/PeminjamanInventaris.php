@@ -24,6 +24,6 @@ class PeminjamanInventaris extends Model
      */
     public function inventaris()
     {
-        return $this->belongsToMany(Inventaris::class, 'inventaris_peminjaman', 'id_peminjaman_inventaris', 'id_inventaris');
+        return $this->belongsToMany(Inventaris::class, 'peminjaman_inventaris', 'id_inventaris', 'id_inventaris');
     }
 }

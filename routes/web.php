@@ -44,13 +44,19 @@ Route::get('/hmif/api/jadwalRuangan',[HmifController::class, 'getJadwalRuangan']
 Route::get('/hmif/api/ruangan', [HmifController::class, 'getRuangan'])->name('api.ruangan');
 Route::get('/hmif/api/jadwalRuanganByRoom', [HmifController::class, 'getJadwalRuanganByRoom'])->name('api.jadwalRuanganByRoom');
 
+Route::get('/hmif/roomsFacilities', [HmifController::class, 'showAllRoomFacilities'])->name('hmif.fasilitas');
+
+Route::get('/hmif/peminjamanBarang', [HmifController::class, 'viewPeminjamanBarang'])->name('hmif.PemBarang');
+Route::post('/hmif/peminjamanBarang', [HmifController::class, 'storePeminjamanBarang'])->name('hmif.storePemBarang');
 //====================================================== HMIF SIDE END ======================================================
 
 
 //======================================================   STAFF SIDE   ======================================================
 Route::get('/stafflab/dashboard',[StaffController::class,'index'])->name('stafflab-dashboard');
 
+
 Route::post('/stafflab/roomsFacilities/{room_id}', [StaffController::class, 'storeFacility'])->name('stafflab.storeFacility');
+
 Route::get('/stafflab/roomsFacilities', [StaffController::class, 'showAllRoomFacilities'])->name('stafflab.roomFacilities');
 Route::get('/stafflab/roomsFacilities/{id}/edit', [StaffController::class, 'editRoomFacilities'])->name('stafflab.editFacilities');
 Route::put('/stafflab/roomsFacilities/{id}', [StaffController::class, 'updateRoomFacilities'])->name('stafflab.updateFacilities');

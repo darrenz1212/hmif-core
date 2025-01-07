@@ -8,11 +8,11 @@
     <div class="container mt-4">
         <h4>Daftar Ruangan</h4>
         <table class="table table-bordered table-striped mt-3">
-
             <tbody>
                 @foreach($ruangan as $room)
                     <tr>
                         <td>{{ $room->nama_ruangan }}</td>
+
 {{--                        <td>{{ $room->kapasitas }}</td>--}}
 {{--                        <td>--}}
 {{--                            @if($room->fasilitas->isNotEmpty())--}}

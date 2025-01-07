@@ -22,6 +22,7 @@ class StaffController extends Controller
 //        dd($ruangan[0]->fasilitas[0]->nama_barang);
     }
 
+
     public function storeFacility(Request $request, $roomId)
     {
         $facilityController = new FacilityController();
@@ -29,8 +30,6 @@ class StaffController extends Controller
 
         return redirect()->route('stafflab.editFacilities', $roomId)->with('success', 'Fasilitas berhasil ditambahkan.');
     }
-
-
     public function editRoomFacilities($id)
     {
         $room = Ruangan::with('fasilitas')->findOrFail($id);
@@ -48,7 +47,6 @@ class StaffController extends Controller
         return redirect()->route('stafflab.editFacilities', $roomId)
             ->with('success', 'Fasilitas ruangan berhasil diperbarui.');
     }
-
 
     public function showAllRoom()
     {
@@ -95,7 +93,6 @@ class StaffController extends Controller
 
         return redirect()->route('stafflab.inventory')->with('success', 'Data inventaris berhasil ditambahkan!');
     }
-
     public function updateInventory(Request $request, $id)
     {
         $inventorController = new InventoryController();

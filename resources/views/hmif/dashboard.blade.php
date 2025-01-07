@@ -1,7 +1,6 @@
 @extends('layouts.starter')
 
 @section('header-content')
-    <h3>Halo Anggota HMIF</h3>
 @endsection
 
 @section('main-content')
