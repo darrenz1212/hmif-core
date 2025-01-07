@@ -24,24 +24,15 @@ class KalabController extends Controller
 
     public function createRoom(Request $request)
     {
-        $validatedData = $request->validate([
-            'nama_ruangan' => 'required|string|max:255',
-            'kapasitas' => 'required|integer|min:1',
-        ]);
-        $validatedData['ketersediaan'] = 1;
-        Ruangan::create($validatedData);
+        $roomController = new RoomController();
+        $roomController->storeRoom($request);
         return redirect()->route('kalab-showroom')->with('success', 'Ruangan berhasil ditambahkan.');
     }
 
     public function updateRoom(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'nama_ruangan' => 'required|string|max:255',
-            'kapasitas' => 'required|integer|min:1',
-            'ketersediaan' => 'required|boolean',
-        ]);
-        $ruangan = Ruangan::findOrFail($id);
-        $ruangan->update($validatedData);
+        $roomController = new RoomController();
+        $roomController->updateRoom($request,$id);
 
         return redirect()->route('kalab-showroom')->with('success', 'Ruangan berhasil diperbarui.');
     }

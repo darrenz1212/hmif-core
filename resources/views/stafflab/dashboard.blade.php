@@ -1,9 +1,10 @@
 @extends('layouts.starter')
 
 @section('header-content')
-    <h3>Stafflab</h3>
 @endsection
 
 @section('main-content')
-    <h1>Hello World</h1>
+    <div class="container mt-4 d-flex justify-content-center align-items-center" style="height: 40vh;">
+        <h1 class="display-1">Selamat Datang di LabCore, {{ Auth::user()->name }}!</h1>
+    </div>
 @endsection
