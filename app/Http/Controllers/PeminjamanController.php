@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PeminjamanRuangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class PeminjamanController extends Controller
 {
+
+
 
 //    Fetch all peminjaman status in DB
 //    Used in :
@@ -31,5 +34,45 @@ class PeminjamanController extends Controller
 
         return $peminjamanRuangan;
     }
+
+        public function approved(Request $request, $id)
+    {
+        // Validasi input feedback
+        $validated = $request->validate([
+
+            'feedback' => 'required|string|max:255',
+        ]);
+
+        try {
+            // Cari data peminjaman berdasarkan ID
+            $peminjamanRuangan = PeminjamanRuangan::findOrFail($id);
+
+            $peminjaman = $peminjamanRuangan;
+            // Update status menjadi disetujui
+            $peminjaman->update([
+                'status' => 'disetujui',
+                'feedback' => $validated['feedback'],
+            ]);
+
+            // Panggil fungsi addJadwal dari JadwalRuanganController
+            $jadwalRuanganController = app(JadwalRuanganController::class);
+            $jadwalRuanganController->addJadwal(new Request([
+                'room_id' => $peminjaman->id_ruangan,
+                'tanggal' => $peminjaman->tanggal_peminjaman,
+                'jam_mulai' => $peminjaman->jam_mulai,
+                'jam_selesai' => $peminjaman->jam_selesai,
+                'keterangan' => $peminjaman->keterangan_peminjaman,
+                'isRepeat' => '0',
+            ]));
+
+            return redirect()->back()->with('success', 'Peminjaman telah disetujui dan jadwal ditambahkan.');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+    }
+
+
+
 
 }

@@ -31,6 +31,10 @@ Route::delete('klb/delete/{id}', [KalabController::class, 'deleteInventaris'])->
 Route::get('klb/jadwalruangan',[KalabController::class, 'jadwalRuangan'])->name('klb.jadwalRuangan');
 Route::post('klb/addJadwal', [KalabController::class, 'createJadwal'])->name('jadwalRuangan.store');
 
+Route::get('klb/showPengajuan',[KalabController::class, 'showPengajuan'])->name('klb.showPengajuan');
+Route::post('klb/peminjaman/{id}/approve', [KalabController::class, 'aprrovePengajuan'])->name('peminjaman.approve');
+
+
 Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan'])->name('klbapi.jadwalRuangan');
 Route::get('/klb/api/ruangan', [KalabController::class, 'getRuangan'])->name('klbapi.ruangan');
 Route::get('/klb/api/jadwalRuanganByRoom', [KalabController::class, 'getJadwalRuanganByRoom'])->name('klbapi.jadwalRuanganByRoom');
@@ -79,6 +83,7 @@ Route::put('/stafflab/update', [StaffController::class, 'updateInventory'])->nam
 
 //====================================================== Debugging Session ======================================================
 Route::get('/debug/api/jadwalRuanganByRoom/{roomId}',[HmifController::class, 'getJadwalRuanganByRoom'])->name('debug.jadwalRuangan');
+Route::get('debug/peminjamanApp/15',[\App\Http\Controllers\PeminjamanController::class, 'approved']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

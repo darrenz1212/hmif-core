@@ -130,5 +130,22 @@ class KalabController extends Controller
         return redirect()->route('inventory')->with('success', 'Inventaris berhasil dihapus.');
     }
 
+    public function showPengajuan()
+    {
+        $peminjamanController = new PeminjamanController();
+        $peminjamanRuangan = $peminjamanController->getStatusPeminjaman();
+
+        return view('kalab.peminjaman',[
+            'peminjamanRuangan' => $peminjamanRuangan
+        ]);
+    }
+
+    public function aprrovePengajuan(Request $request, $id)
+    {
+        $peminjamanController = new PeminjamanController();
+        $peminjamanController->approved($request, $id);
+        
+    }
+
 
 }
