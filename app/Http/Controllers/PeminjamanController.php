@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PeminjamanRuangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class PeminjamanController extends Controller
 {
@@ -45,9 +46,11 @@ class PeminjamanController extends Controller
 
         try {
             // Cari data peminjaman berdasarkan ID
-            $peminjamanRuangan = PeminjamanRuangan::findOrFail($id);
+            $peminjaman = PeminjamanRuangan::findOrFail($id);
 
-            $peminjaman = $peminjamanRuangan;
+            $jamMulai = Carbon::parse($peminjaman->jam_mulai)->format('H:i');
+            $jamSelesai = Carbon::parse($peminjaman->jam_selesai)->format('H:i');
+
             // Update status menjadi disetujui
             $peminjaman->update([
                 'status' => 'disetujui',
@@ -59,14 +62,13 @@ class PeminjamanController extends Controller
             $jadwalRuanganController->addJadwal(new Request([
                 'room_id' => $peminjaman->id_ruangan,
                 'tanggal' => $peminjaman->tanggal_peminjaman,
-                'jam_mulai' => $peminjaman->jam_mulai,
-                'jam_selesai' => $peminjaman->jam_selesai,
+                'jam_mulai' => $jamMulai,
+                'jam_selesai' => $jamSelesai,
                 'keterangan' => $peminjaman->keterangan_peminjaman,
                 'isRepeat' => '0',
             ]));
 
-            return redirect()->back()->with('success', 'Peminjaman telah disetujui dan jadwal ditambahkan.');
-
+            
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }

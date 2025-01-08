@@ -144,7 +144,8 @@ class KalabController extends Controller
     {
         $peminjamanController = new PeminjamanController();
         $peminjamanController->approved($request, $id);
-        
+
+        return redirect()->back()->with('success', 'Peminjaman telah disetujui dan jadwal ditambahkan.');
     }
 
 
