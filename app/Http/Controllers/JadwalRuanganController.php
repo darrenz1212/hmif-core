@@ -48,6 +48,22 @@ class JadwalRuanganController extends Controller
             'isRepeat' => 'nullable|boolean',
         ]);
 
+        $conflict = JadwalRuangan::where('room_id', $validatedData['room_id'])
+            ->where('tanggal', $validatedData['tanggal'])
+            ->where(function ($query) use ($validatedData) {
+                $query->whereBetween('jam_mulai', [$validatedData['jam_mulai'], $validatedData['jam_selesai']])
+                    ->orWhereBetween('jam_selesai', [$validatedData['jam_mulai'], $validatedData['jam_selesai']])
+                    ->orWhere(function ($q) use ($validatedData) {
+                        $q->where('jam_mulai', '<=', $validatedData['jam_mulai'])
+                            ->where('jam_selesai', '>=', $validatedData['jam_selesai']);
+                    });
+            })
+            ->exists();
+
+        if ($conflict) {
+            return redirect()->back()->withErrors(['error' => 'Jadwal bertumpuk dengan jadwal yang sudah ada.']);
+        }
+
         $isRepeat = filter_var($request->input('isRepeat'), FILTER_VALIDATE_BOOLEAN);
         $currentDate = $validatedData['tanggal'];
 
