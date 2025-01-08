@@ -148,5 +148,13 @@ class KalabController extends Controller
         return redirect()->back()->with('success', 'Peminjaman telah disetujui dan jadwal ditambahkan.');
     }
 
+    public function declinePengajuan(Request $request, $id)
+    {
+        $peminjamanController = new PeminjamanController();
+        $peminjamanController->decline($request,$id);
+
+        return redirect()->back()->with('success', 'Peminjaman telah ditolak.');
+    }
+
 
 }

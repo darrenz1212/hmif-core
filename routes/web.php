@@ -33,6 +33,7 @@ Route::post('klb/addJadwal', [KalabController::class, 'createJadwal'])->name('ja
 
 Route::get('klb/showPengajuan',[KalabController::class, 'showPengajuan'])->name('klb.showPengajuan');
 Route::post('klb/peminjaman/{id}/approve', [KalabController::class, 'aprrovePengajuan'])->name('peminjaman.approve');
+Route::post('klb/peminjaman/{id}/decline', [KalabController::class, 'declinePengajuan'])->name('peminjaman.decline');
 
 
 Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan'])->name('klbapi.jadwalRuangan');

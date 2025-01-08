@@ -45,7 +45,6 @@ class PeminjamanController extends Controller
         ]);
 
         try {
-            // Cari data peminjaman berdasarkan ID
             $peminjaman = PeminjamanRuangan::findOrFail($id);
 
             $jamMulai = Carbon::parse($peminjaman->jam_mulai)->format('H:i');
@@ -57,7 +56,6 @@ class PeminjamanController extends Controller
                 'feedback' => $validated['feedback'],
             ]);
 
-            // Panggil fungsi addJadwal dari JadwalRuanganController
             $jadwalRuanganController = app(JadwalRuanganController::class);
             $jadwalRuanganController->addJadwal(new Request([
                 'room_id' => $peminjaman->id_ruangan,
@@ -68,11 +66,31 @@ class PeminjamanController extends Controller
                 'isRepeat' => '0',
             ]));
 
-            
+
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
     }
+
+    public function decline(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'feedback' => 'required|string|max:255',
+        ]);
+
+        try {
+            $peminjaman = PeminjamanRuangan::findOrFail($id);
+            $peminjaman->update([
+                'status' => 'ditolak',
+                'feedback' => $validated['feedback'],
+            ]);
+
+            return redirect()->back()->with('success', 'Peminjaman telah ditolak.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+    }
+
 
 
 
