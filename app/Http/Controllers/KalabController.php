@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JadwalRuangan;
 use App\Models\Ruangan;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,54 @@ class KalabController extends Controller
         ]);
 
     }
+
+    public function jadwalRuangan()
+    {
+        // Render halaman kalender
+        return view('kalab.jadwalRuangan');
+    }
+
+    public function getRuangan()
+    {
+        $getRuangan = new RoomController();
+        $ruangan = $getRuangan ->getAllRoom();
+
+        return response()->json($ruangan);
+    }
+
+    public function getJadwalRuangan()
+    {
+        // Ambil data jadwal dari RoomController
+        $roomController = new RoomController();
+        $jadwalRuangan = $roomController->getJadwalRuangan();
+
+        // Kembalikan data dalam format JSON untuk FullCalendar
+        return response()->json($jadwalRuangan);
+    }
+    public function getJadwalRuanganByRoom(Request $request)
+    {
+        $roomId = $request->query('room_id');
+
+        $roomController = new RoomController();
+        $jadwalRuangan = $roomController->getJadwalRuangan();
+        if ($roomId) {
+            $jadwalRuanganItem = $jadwalRuangan->filter(function ($item) use ($roomId) {
+                return $item['room_id'] == $roomId;
+            });
+        }
+
+        return response()->json($jadwalRuanganItem->values());
+//        return dd($jadwalRuanganItem);
+    }
+
+    public function createJadwal(Request $request)
+    {
+        $jadwalRuanganController = new JadwalRuanganController();
+        $jadwalRuanganController->addJadwal($request);
+
+        return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan.');
+    }
+
 
     public function createRoom(Request $request)
     {

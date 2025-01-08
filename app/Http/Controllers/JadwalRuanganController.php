@@ -36,4 +36,34 @@ class JadwalRuanganController extends Controller
 
         return response()->json($events);
     }
+
+    public function addJadwal(Request $request)
+    {
+        $validatedData = $request->validate([
+            'room_id' => 'required|exists:ruangan,room_id',
+            'tanggal' => 'required|date',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            'keterangan' => 'nullable|string|max:255',
+            'isRepeat' => 'nullable|boolean',
+        ]);
+
+        $isRepeat = filter_var($request->input('isRepeat'), FILTER_VALIDATE_BOOLEAN);
+        $currentDate = $validatedData['tanggal'];
+
+            // Loop untuk penjadwalan 6 bulan ke depan jika isRepeat true
+        for ($i = 0; $i <= ($isRepeat ? 24 : 0); $i++) {
+            JadwalRuangan::create([
+                'room_id' => $validatedData['room_id'],
+                'tanggal' => $currentDate,
+                'jam_mulai' => $validatedData['jam_mulai'],
+                'jam_selesai' => $validatedData['jam_selesai'],
+                'keterangan' => $validatedData['keterangan'],
+            ]);
+
+            $currentDate = date('Y-m-d', strtotime($currentDate . ' +7 days'));
+        }
+//        return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan.');
+    }
+
 }

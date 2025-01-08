@@ -27,6 +27,13 @@ Route::get('klb/inventaris',[KalabController::class, 'showInventaris'])->name('i
 Route::post('klb/store', [KalabController::class, 'createInventaris'])->name('inventory.store');
 Route::put('klb/update/{id}', [KalabController::class, 'updateInventaris'])->name('inventory.update');
 Route::delete('klb/delete/{id}', [KalabController::class, 'deleteInventaris'])->name('inventory.destroy');
+
+Route::get('klb/jadwalruangan',[KalabController::class, 'jadwalRuangan'])->name('klb.jadwalRuangan');
+Route::post('klb/addJadwal', [KalabController::class, 'createJadwal'])->name('jadwalRuangan.store');
+
+Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan'])->name('klbapi.jadwalRuangan');
+Route::get('/klb/api/ruangan', [KalabController::class, 'getRuangan'])->name('klbapi.ruangan');
+Route::get('/klb/api/jadwalRuanganByRoom', [KalabController::class, 'getJadwalRuanganByRoom'])->name('klbapi.jadwalRuanganByRoom');
 //====================================================== KALAB SIDE END ======================================================
 
 
