@@ -92,8 +92,13 @@ class HmifController extends Controller
             'surat_peminjaman' => 'required|file|mimes:pdf|max:2048',
         ]);
 
-        $filePath = $request->file('surat_peminjaman')->store('surat_peminjaman', 'public');
+        // Membentuk nama file sesuai format untuk ruangan
+        $fileName = sprintf('ruangan_%d%d%d.pdf', DB::table('peminjaman_ruangan')->max('id_peminjaman_ruangan') + 1, Auth::id(), $validatedData['id_ruangan']);
 
+        // Menyimpan file dengan nama sesuai format ke folder tertentu
+        $filePath = $request->file('surat_peminjaman')->storeAs('surat_peminjaman', $fileName, 'public');
+
+        // Insert data ke tabel dengan path file
         DB::table('peminjaman_ruangan')->insert([
             'id_ruangan' => $validatedData['id_ruangan'],
             'id_peminjam' => Auth::id(),
@@ -196,9 +201,16 @@ class HmifController extends Controller
             return redirect()->back()->with('error', 'Barang tidak tersedia pada waktu tersebut.');
         }
 
-        // Simpan data peminjaman
-        $filePath = $request->file('surat_peminjaman')->store('surat_peminjaman', 'public');
+        // Dapatkan id_peminjaman terbaru (autoincrement) dari database
+        $idPeminjaman = PeminjamanInventaris::max('id_peminjaman_inventaris') + 1;
 
+        // Membentuk nama file sesuai format untuk barang
+        $fileName = sprintf('barang_%d%d%d.pdf', $idPeminjaman, Auth::id(), $validatedData['id_inventaris']);
+
+        // Menyimpan file dengan nama sesuai format ke folder tertentu
+        $filePath = $request->file('surat_peminjaman')->storeAs('surat_peminjaman', $fileName, 'public');
+
+        // Simpan data peminjaman
         PeminjamanInventaris::create([
             'id_peminjam' => Auth::id(),
             'tanggal_peminjaman' => $validatedData['tanggal_peminjaman'],
@@ -207,10 +219,9 @@ class HmifController extends Controller
             'surat_peminjaman' => $filePath,
             'id_inventaris' => $validatedData['id_inventaris'],
             'status' => 'diajukan',
-            'keterangan_peminjaman' => $validatedData['keterangan_peminjaman']
+            'keterangan_peminjaman' => $validatedData['keterangan_peminjaman'],
         ]);
 
         return redirect()->route('hmif.PemBarang')->with('success', 'Peminjaman berhasil ditambahkan.');
     }
-
 }

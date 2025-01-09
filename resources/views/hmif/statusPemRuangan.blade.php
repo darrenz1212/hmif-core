@@ -62,7 +62,29 @@
                             <span class="badge bg-secondary">Tidak Diketahui</span>
                         @endif
                     </td>
-                    <td>{{ $item->feedback ?? 'Belum Ada Feedback' }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal{{ $item->id_peminjaman_ruangan }}">
+                            Lihat Feedback
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="feedbackModal{{ $item->id_peminjaman_ruangan }}" tabindex="-1" aria-labelledby="feedbackModalLabel{{ $item->id_peminjaman_ruangan }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="feedbackModalLabel{{ $item->id_peminjaman_ruangan }}">Feedback</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ $item->feedback ?? 'Belum Ada Feedback' }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
 
                 </tr>
             @empty
@@ -84,46 +106,47 @@
                 <form id="formPeminjaman" action="{{ route('submitPengajuanRuangan') }}" method="POST" enctype="multipart/form-data" novalidate>
                     @csrf
                     <div class="modal-body">
-                    <div class="modal-body">
-    <!-- Input untuk Tanggal dan Jam -->
-    <div class="mb-3">
-        <label for="tanggal_peminjaman" class="form-label">Tanggal Peminjaman</label>
-        <input type="date" name="tanggal_peminjaman" id="tanggal_peminjaman" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label for="jam_mulai" class="form-label">Jam Mulai</label>
-        <input type="time" name="jam_mulai" id="jam_mulai" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label for="jam_selesai" class="form-label">Jam Selesai</label>
-        <input type="time" name="jam_selesai" id="jam_selesai" class="form-control" required>
-    </div>
+                        <div id="alert-container"></div>
+                        <!-- Input untuk Tanggal dan Jam -->
+                        <div class="mb-3">
+                            <label for="tanggal_peminjaman" class="form-label">Tanggal Peminjaman</label>
+                            <input type="date" name="tanggal_peminjaman" id="tanggal_peminjaman" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jam_mulai" class="form-label">Jam Mulai</label>
+                            <input type="time" name="jam_mulai" id="jam_mulai" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jam_selesai" class="form-label">Jam Selesai</label>
+                            <input type="time" name="jam_selesai" id="jam_selesai" class="form-control" required>
+                        </div>
 
-    <!-- Tombol untuk Cek Ketersediaan -->
-    <button type="button" id="cekKetersediaanBtn" class="btn btn-primary w-100">Cek Ketersediaan</button>
+                        <!-- Tombol untuk Cek Ketersediaan -->
 
-    <!-- Field untuk Memilih Ruangan -->
-    <div class="mb-3 d-none" id="pilihRuanganWrapper">
-        <label for="id_ruangan" class="form-label">Pilih Ruangan</label>
-        <select name="id_ruangan" id="id_ruangan" class="form-control" required></select>
-    </div>
+                        <button type="button" id="cekKetersediaanBtn" class="btn btn-primary w-100">Cek Ketersediaan</button>
 
-    <!-- Input untuk Keterangan -->
-    <div class="mb-3">
-        <label for="keterangan_peminjaman" class="form-label">Keterangan Peminjaman</label>
-        <textarea name="keterangan_peminjaman" id="keterangan_peminjaman" class="form-control" placeholder="Opsional"></textarea>
-    </div>
+                        <!-- Field untuk Memilih Ruangan -->
+                        <div class="mb-3 d-none" id="pilihRuanganWrapper">
+                            <label for="id_ruangan" class="form-label">Pilih Ruangan</label>
+                            <select name="id_ruangan" id="id_ruangan" class="form-control" required></select>
+                        </div>
 
-    <!-- Input untuk Surat Peminjaman -->
-    <div class="mb-3">
-        <label for="surat_peminjaman" class="form-label">Surat Peminjaman</label>
-        <input type="file" name="surat_peminjaman" id="surat_peminjaman" class="form-control" required>
-    </div>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-    <button type="submit" class="btn btn-primary">Ajukan Peminjaman</button>
-</div>
+                        <!-- Input untuk Keterangan -->
+                        <div class="mb-3">
+                            <label for="keterangan_peminjaman" class="form-label">Keterangan Peminjaman</label>
+                            <textarea name="keterangan_peminjaman" id="keterangan_peminjaman" class="form-control" placeholder="Opsional"></textarea>
+                        </div>
+
+                        <!-- Input untuk Surat Peminjaman -->
+                        <div class="mb-3">
+                            <label for="surat_peminjaman" class="form-label">Surat Peminjaman</label>
+                            <input type="file" name="surat_peminjaman" id="surat_peminjaman" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Ajukan Peminjaman</button>
+                    </div>
 
                 </form>
             </div>
@@ -137,26 +160,35 @@
         const jamMulai = document.getElementById('jam_mulai').value;
         const jamSelesai = document.getElementById('jam_selesai').value;
 
-        // Validasi input
+        // Fungsi untuk menampilkan alert Bootstrap
+        function showAlert(message, type = 'warning') {
+            const alertContainer = document.getElementById('alert-container');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+
         if (!tanggal || !jamMulai || !jamSelesai) {
-            alert('Harap lengkapi semua field sebelum cek ketersediaan.');
+            showAlert('Harap lengkapi semua field sebelum cek ketersediaan.');
             return;
         }
 
         const today = new Date();
         const selectedDate = new Date(tanggal);
-        today.setHours(0, 0, 0, 0); // Set waktu ke 00:00 untuk hari ini
+        today.setHours(0, 0, 0, 0);
         const minDate = new Date(today);
-        minDate.setDate(today.getDate() + 3); // H+3
+        minDate.setDate(today.getDate() + 3);
 
         if (selectedDate < minDate) {
-            alert('Tanggal peminjaman paling cepat H+3 dari hari ini.');
+            showAlert('Tanggal peminjaman paling cepat H+3 dari hari ini.');
             return;
         }
 
-        // Validasi Jam Selesai harus lebih besar dari Jam Mulai
         if (jamSelesai <= jamMulai) {
-            alert('Jam selesai harus lebih besar dari jam mulai.');
+            showAlert('Jam selesai harus lebih besar dari jam mulai.');
             return;
         }
 
@@ -171,7 +203,7 @@
             .then(response => response.json())
             .then(data => {
                 const selectRuangan = document.getElementById('id_ruangan');
-                selectRuangan.innerHTML = ''; // Kosongkan daftar ruangan sebelumnya
+                selectRuangan.innerHTML = '';
 
                 if (data.available) {
                     data.ruangan.forEach(ruangan => {
@@ -180,19 +212,19 @@
                         option.textContent = ruangan.nama_ruangan;
                         selectRuangan.appendChild(option);
                     });
-
-                    // Tampilkan field "Pilih Ruangan"
                     document.getElementById('pilihRuanganWrapper').classList.remove('d-none');
+                    showAlert('Ruangan tersedia untuk waktu yang dipilih!', 'success');
                 } else {
-                    alert('Tidak ada ruangan yang tersedia pada waktu tersebut.');
+                    showAlert('Tidak ada ruangan yang tersedia pada waktu tersebut.');
                     document.getElementById('pilihRuanganWrapper').classList.add('d-none');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Terjadi kesalahan saat memeriksa ketersediaan.');
+                showAlert('Terjadi kesalahan saat memeriksa ketersediaan.', 'danger');
             });
     });
-
 </script>
+
+
 @endsection
