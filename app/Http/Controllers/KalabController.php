@@ -88,11 +88,16 @@ class KalabController extends Controller
 
     public function deleteRoom($id)
     {
-        $ruangan = Ruangan::findOrFail($id);
-        $ruangan->delete();
-
-        return redirect()->route('kalab-showroom')->with('success', 'Ruangan berhasil dihapus.');
+        try {
+            $ruangan = Ruangan::findOrFail($id);
+            $ruangan->delete();
+    
+            return redirect()->route('kalab-showroom')->with('success', 'Ruangan berhasil dihapus.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->route('kalab-showroom')->with('error', 'Tidak dapat menghapus ruangan karena terkait dengan data lain.');
+        }
     }
+    
 
 //    All inventory method is decomposition from inventoryController
     public function showInventaris()

@@ -48,6 +48,11 @@ Route::get('hmif/pengajuanRuangan', [HmifController::class, 'pengajuanRuangan'])
 Route::post('hmif/pengajuanRuangan', [HmifController::class, 'submitPengajuanRuangan'])->name('submitPengajuanRuangan');
 Route::get('/hmif/statusPemRuangan', [HmifController::class, 'statusPemRuangan'])->name('statusPemRuangan');
 Route::post('/hmif/ketersediaanRuangan', [RoomController::class, 'getAvailableRooms'])->name('ketersediaanRuangan');
+Route::post('/hmif/submitPengajuanRuangan', [HmifController::class, 'submitPengajuanRuangan'])->name('submitPengajuanRuangan');
+Route::post('/hmif/checkRoomAvailability', [HmifController::class, 'checkRoomAvailability'])->name('checkRoomAvailability');
+
+Route::post('/checkAvailability', [HmifController::class, 'checkAvailability'])->name('checkAvailability');
+Route::post('/storePemBarang', [HmifController::class, 'storePeminjamanBarang'])->name('hmif.storePemBarang');
 
 Route::get('/hmif/ketersediaanRuangan/{id}/info', [RoomController::class, 'getRoomInfo'])->name('ruangan.info');
 Route::get('/hmif/jadwalRuangan', [HmifController::class, 'jadwalRuangan'])->name('jadwalRuangan');

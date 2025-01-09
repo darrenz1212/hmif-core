@@ -1,7 +1,7 @@
 @extends('layouts.starter')
 
 @section('header-content')
-    <h3>Halo Staff Lab</h3>
+    <!-- <h3>Halo Staff Lab</h3> -->
 @endsection
 
 @section('main-content')

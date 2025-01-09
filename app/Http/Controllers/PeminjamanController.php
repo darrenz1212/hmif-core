@@ -27,7 +27,8 @@ class PeminjamanController extends Controller
                 'peminjaman_ruangan.jam_selesai',
                 'peminjaman_ruangan.status',
                 'users.name as nama_peminjam',
-                'ruangan.nama_ruangan'
+                'ruangan.nama_ruangan',
+                'peminjaman_ruangan.feedback'
             )
             ->join('users', 'peminjaman_ruangan.id_peminjam', '=', 'users.id')
             ->join('ruangan', 'peminjaman_ruangan.id_ruangan', '=', 'ruangan.room_id')
