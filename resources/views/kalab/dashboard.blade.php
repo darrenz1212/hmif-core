@@ -11,6 +11,7 @@
         <a href="{{ route('kalab-showroom') }}" class="btn btn-primary">Room Control</a>
         <a href="{{ route('inventory') }}" class="btn btn-primary mr-2">Inventory Control</a>
         <a href="{{ route('klb.jadwalRuangan')}}" class="btn btn-primary mr-2">Schedule Control</a>
-        <a href="{{ route('klb.showPengajuan') }}" class="btn btn-primary mr-2">Pengajuan</a>
+        <a href="{{ route('klb.showPengajuan') }}" class="btn btn-primary mr-2">Pengajuan Ruangan</a>
+        <a href="{{ route('klb.showPengajuanInventaris') }}" class="btn btn-primary mr-2">Pengajuan Inventaris</a>
     </div>
 @endsection

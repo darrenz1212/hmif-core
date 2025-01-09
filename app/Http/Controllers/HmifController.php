@@ -108,6 +108,7 @@ class HmifController extends Controller
             'surat_peminjaman' => $filePath,
             'keterangan_peminjaman' => $request->keterangan_peminjaman ?? null,
             'status' => 'sedang diajukan',
+            'feedback' => ' '
         ]);
 
         return redirect()->route('statusPemRuangan')->with('success', 'Peminjaman ruangan berhasil ditambahkan.');

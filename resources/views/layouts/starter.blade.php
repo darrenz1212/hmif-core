@@ -50,7 +50,7 @@
         <div class="sidebar-brand">
             <a href="{{ route('dashboard') }}" class="brand-link">
                 <img src="../../dist/assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow">
-                <span class="brand-text fw-light">LABCORE</span>
+                <span class="brand-text fw-light">HMIF Core</span>
             </a>
         </div>
         <!--end::Sidebar Brand-->
@@ -67,13 +67,28 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('kalab-showroom') }}" class="nav-link">
+                            <a href="{{ route('kalab-showroom') }}" class="nav-link {{ request()->routeIs('kalab-showroom') ? 'active' : '' }}">
                                 <p>Manage Rooms</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('inventory') }}" class="nav-link">
-                                <p>Inventory</p>
+                            <a href="{{ route('inventory') }}" class="nav-link {{ request()->routeIs('inventory') ? 'active' : '' }}">
+                                <p>Inventory Control</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('klb.showPengajuan') }}" class="nav-link {{ request()->routeIs('klb.showPengajuan') ? 'active' : '' }}">
+                                <p>Pengajuan Peminjaman Ruangan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('klb.jadwalRuangan') }}" class="nav-link {{ request()->routeIs('klb.jadwalRuangan') ? 'active' : '' }}">
+                                <p>Jadwal Ruangan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('klb.showPengajuanInventaris') }}" class="nav-link {{ request()->routeIs('klb.showPengajuanInventaris') ? 'active' : '' }}">
+                                <p>Pengajuan Peminjaman Inventaris</p>
                             </a>
                         </li>
                     @endif

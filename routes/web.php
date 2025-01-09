@@ -35,6 +35,11 @@ Route::get('klb/showPengajuan',[KalabController::class, 'showPengajuan'])->name(
 Route::post('klb/peminjaman/{id}/approve', [KalabController::class, 'aprrovePengajuan'])->name('peminjaman.approve');
 Route::post('klb/peminjaman/{id}/decline', [KalabController::class, 'declinePengajuan'])->name('peminjaman.decline');
 
+Route::get('klb/showPeminjamanBarang',[KalabController::class,'showPengajuanInventaris'])->name('klb.showPengajuanInventaris');
+Route::put('/kalab/peminjaman/{id}/approve', [KalabController::class, 'approvedPengajuanBarang'])->name('kalab.approvedPengajuanBarang');
+Route::put('/kalab/peminjaman/{id}/decline', [KalabController::class, 'declinePengajuanBarang'])->name('kalab.declinePengajuanBarang');
+
+
 
 Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan'])->name('klbapi.jadwalRuangan');
 Route::get('/klb/api/ruangan', [KalabController::class, 'getRuangan'])->name('klbapi.ruangan');
@@ -85,6 +90,13 @@ Route::put('/stafflab/rooms/{id}', [StaffController::class, 'updateRooms'])->nam
 Route::get('/stafflab/inventory', [StaffController::class, 'inventory'])->name('stafflab.inventory');
 Route::post('/stafflab/store', [StaffController::class, 'storeInventory'])->name('stafflab.storeInventory');
 Route::put('/stafflab/update', [StaffController::class, 'updateInventory'])->name('stafflab.updateInventory');
+
+Route::get('klb/jadwalruangan',[KalabController::class, 'jadwalRuangan'])->name('klb.jadwalRuangan');
+Route::post('klb/addJadwal', [KalabController::class, 'createJadwal'])->name('jadwalRuangan.store');
+
+Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan'])->name('staff.jadwalRuangan');
+Route::get('/klb/api/ruangan', [KalabController::class, 'getRuangan'])->name('klbapi.ruangan');
+Route::get('/klb/api/jadwalRuanganByRoom', [KalabController::class, 'getJadwalRuanganByRoom'])->name('klbapi.jadwalRuanganByRoom');
 //====================================================== STAFF SIDE END ======================================================
 
 //====================================================== Debugging Session ======================================================

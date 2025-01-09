@@ -12,5 +12,6 @@
         <a href="{{ route('stafflab.roomFacilities') }}" class="btn btn-primary">Data Fasilitas Ruangan</a>
         <a href="{{ route('stafflab.rooms') }}" class="btn btn-primary mr-2">Data Ruangan</a>
         <a href="{{ route('stafflab.inventory') }}" class="btn btn-primary mr-2">Data Inventaris</a>
+        <a href="{{ route('klb.jadwalRuangan') }}" class="btn btn-primary mr-2">Jadwal Ruangan</a>
     </div>
 @endsection
