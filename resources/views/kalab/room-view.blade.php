@@ -6,6 +6,21 @@
 
 @section('main-content')
     <div class="container mt-4">
+        <!-- Alert untuk Pesan Sukses atau Error -->
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <!-- Tombol Tambah Ruangan -->
         <div class="d-flex justify-content-end mb-3">
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoomModal">Tambah Ruangan</button>
@@ -16,7 +31,7 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>ID</th>
+                <th>No</th>
                 <th>Nama Ruangan</th>
                 <th>Kapasitas</th>
                 <th>Status</th>

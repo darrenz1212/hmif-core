@@ -19,6 +19,9 @@
     </div>
     <div class="card">
         <div class="card-body login-card-body">
+        <span class="text-blue-600">
+            <!-- {{ Auth::user()->role ?? 'Tidak ada role yang ditentukan' }} -->
+        </span>
             <p class="login-box-msg">Sign in to start your session</p>
             <!-- Laravel Breeze Login Form -->
             <form action="{{ route('login') }}" method="post">

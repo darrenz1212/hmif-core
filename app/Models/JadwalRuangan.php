@@ -21,6 +21,8 @@ class JadwalRuangan extends Model
         'keterangan',
     ];
 
+
+
     /**
      * Relasi ke model Ruangan.
      */

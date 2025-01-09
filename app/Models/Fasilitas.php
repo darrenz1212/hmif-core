@@ -11,12 +11,15 @@ class Fasilitas extends Model
 
     protected $table = 'fasilitas';
 
+    protected $primaryKey = 'id_fasilitas';
+
     protected $fillable = [
         'nama_barang',
         'kondisi_barang',
         'id_ruangan',
     ];
 
+    public $timestamps = false;
     /**
      * Relasi ke model Ruangan (Fasilitas dimiliki oleh satu ruangan)
      */

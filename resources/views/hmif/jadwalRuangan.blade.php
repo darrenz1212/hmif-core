@@ -67,6 +67,7 @@
 
             function loadEvents(roomId) {
                 calendar.removeAllEvents();
+                console.log("Room id : ", roomId)
                 var eventsUrl = `/hmif/api/jadwalRuanganByRoom?room_id=${roomId}`;
                 fetch(eventsUrl)
                     .then(response => response.json())

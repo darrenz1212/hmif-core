@@ -14,16 +14,21 @@ class PeminjamanInventaris extends Model
     protected $fillable = [
         'id_peminjam',
         'surat_peminjaman',
-        'keterangan_peminjaman',
-        'status',
         'id_inventaris',
+        'status',
+        'tanggal_peminjaman',
+        'jam_mulai',
+        'jam_selesai',
+        'keterangan_peminjaman',
     ];
+
+    public $timestamps = false;
 
     /**
      * Relasi ke model Inventaris (banyak inventaris bisa dipinjam dalam satu peminjaman)
      */
     public function inventaris()
     {
-        return $this->belongsToMany(Inventaris::class, 'inventaris_peminjaman', 'id_peminjaman_inventaris', 'id_inventaris');
+        return $this->belongsToMany(Inventaris::class, 'peminjaman_inventaris', 'id_inventaris', 'id_inventaris');
     }
 }
