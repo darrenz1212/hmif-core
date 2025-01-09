@@ -14,10 +14,15 @@ class PeminjamanInventaris extends Model
     protected $fillable = [
         'id_peminjam',
         'surat_peminjaman',
-        'keterangan_peminjaman',
-        'status',
         'id_inventaris',
+        'status',
+        'tanggal_peminjaman',
+        'jam_mulai',
+        'jam_selesai',
+        'keterangan_peminjaman',
     ];
+
+    public $timestamps = false;
 
     /**
      * Relasi ke model Inventaris (banyak inventaris bisa dipinjam dalam satu peminjaman)

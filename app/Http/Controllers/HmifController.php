@@ -85,29 +85,29 @@ class HmifController extends Controller
     public function submitPengajuanRuangan(Request $request)
     {
         $validatedData = $request->validate([
-            'id_ruangan' => 'required|integer',
-            'id_peminjam' => 'required|integer',
-            'surat_peminjaman' => 'required|file|mimes:pdf|max:2048',
-            'keterangan_peminjaman' => 'nullable|string|max:255',
             'tanggal_peminjaman' => 'required|date',
-            'waktu_peminjaman' => 'required',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            'id_ruangan' => 'required|integer|exists:ruangan,room_id',
+            'surat_peminjaman' => 'required|file|mimes:pdf|max:2048',
         ]);
 
         $filePath = $request->file('surat_peminjaman')->store('surat_peminjaman', 'public');
 
-        // Insert data into the database
         DB::table('peminjaman_ruangan')->insert([
             'id_ruangan' => $validatedData['id_ruangan'],
-            'id_peminjam' => $validatedData['id_peminjam'],
-            'surat_peminjaman' => $filePath,
-            'keterangan_peminjaman' => $validatedData['keterangan_peminjaman'],
+            'id_peminjam' => Auth::id(),
             'tanggal_peminjaman' => $validatedData['tanggal_peminjaman'],
-            'waktu_peminjaman' => $validatedData['waktu_peminjaman'],
+            'jam_mulai' => $validatedData['jam_mulai'],
+            'jam_selesai' => $validatedData['jam_selesai'],
+            'surat_peminjaman' => $filePath,
+            'keterangan_peminjaman' => $request->keterangan_peminjaman ?? null,
             'status' => 'sedang diajukan',
         ]);
 
-        return redirect()->back()->with('success', 'Pengajuan ruangan berhasil disimpan.');
+        return redirect()->route('statusPemRuangan')->with('success', 'Peminjaman ruangan berhasil ditambahkan.');
     }
+
 
     public function showAllRoomFacilities()
     {
@@ -122,44 +122,95 @@ class HmifController extends Controller
         return view('hmif.PemBarang', compact('peminjaman', 'inventaris'));
     }
 
+    public function checkAvailability(Request $request)
+    {
+        $tanggal = $request->tanggal;
+        $jamMulai = $request->jamMulai;
+        $jamSelesai = $request->jamSelesai;
+
+        // Cari barang yang sudah dipinjam pada tanggal dan waktu tersebut
+        $peminjaman = PeminjamanInventaris::where('tanggal_peminjaman', $tanggal)
+            ->where(function ($query) use ($jamMulai, $jamSelesai) {
+                $query->whereBetween('jam_mulai', [$jamMulai, $jamSelesai])
+                    ->orWhereBetween('jam_selesai', [$jamMulai, $jamSelesai])
+                    ->orWhereRaw('? BETWEEN jam_mulai AND jam_selesai', [$jamMulai])
+                    ->orWhereRaw('? BETWEEN jam_mulai AND jam_selesai', [$jamSelesai]);
+            })
+            ->pluck('id_inventaris');
+
+        // Cari barang yang tidak dipinjam pada waktu tersebut
+        $availableItems = Inventaris::whereNotIn('id_inventaris', $peminjaman)->get();
+
+        return response()->json($availableItems);
+    }
+
+    public function checkRoomAvailability(Request $request)
+    {
+        $validated = $request->validate([
+            'tanggal_peminjaman' => 'required|date',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+        ]);
+
+        $ruanganTersedia = Ruangan::whereNotIn('room_id', function ($query) use ($validated) {
+            $query->select('id_ruangan')
+                ->from('peminjaman_ruangan')
+                ->where('tanggal_peminjaman', $validated['tanggal_peminjaman'])
+                ->where(function ($q) use ($validated) {
+                    $q->whereBetween('jam_mulai', [$validated['jam_mulai'], $validated['jam_selesai']])
+                        ->orWhereBetween('jam_selesai', [$validated['jam_mulai'], $validated['jam_selesai']]);
+                });
+        })->get();
+
+        return response()->json(['available' => $ruanganTersedia->isNotEmpty(), 'ruangan' => $ruanganTersedia]);
+    }
+
+
+
     /**
      * Menyimpan data peminjaman baru dari modal.
      */
     public function storePeminjamanBarang(Request $request)
     {
-        // Validasi input
         $validatedData = $request->validate([
+            'tanggal_peminjaman' => 'required|date',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'surat_peminjaman' => 'required|file|mimes:pdf|max:2048',
-            'keterangan_peminjaman' => 'nullable|string|max:255',
-            'status' => 'required|string',
-            'id_inventaris' => 'required|integer|exists:inventaris,id_inventaris', // Hanya satu barang yang bisa dipilih
+            'id_inventaris' => 'required|integer|exists:inventaris,id_inventaris',
+            'keterangan_peminjaman' => 'required|string|max:255'
         ]);
 
-        try {
-            // Simpan file surat peminjaman
-            $filePath = $request->file('surat_peminjaman')->store('surat_peminjaman', 'public');
+        // Pastikan barang tidak dipinjam pada waktu tersebut
+        $isAvailable = PeminjamanInventaris::where('tanggal_peminjaman', $validatedData['tanggal_peminjaman'])
+            ->where('id_inventaris', $validatedData['id_inventaris'])
+            ->where(function ($query) use ($validatedData) {
+                $query->whereBetween('jam_mulai', [$validatedData['jam_mulai'], $validatedData['jam_selesai']])
+                    ->orWhereBetween('jam_selesai', [$validatedData['jam_mulai'], $validatedData['jam_selesai']])
+                    ->orWhereRaw('? BETWEEN jam_mulai AND jam_selesai', [$validatedData['jam_mulai']])
+                    ->orWhereRaw('? BETWEEN jam_mulai AND jam_selesai', [$validatedData['jam_selesai']]);
+            })
+            ->doesntExist();
 
-            // Simpan data ke tabel `peminjaman_inventaris`
-            $insertData = [
-                'id_peminjam' => Auth::id(),
-                'surat_peminjaman' => $filePath,
-                'keterangan_peminjaman' => $validatedData['keterangan_peminjaman'] ?? null,
-                'status' => $validatedData['status'],
-                'id_inventaris' => $validatedData['id_inventaris'], // Simpan satu barang saja
-                'id_peminjaman_inventaris' => null, // Null atau bisa diisi jika ada logika tambahan
-            ];
-
-            DB::table('peminjaman_inventaris')->insert($insertData);
-
-            return redirect()->route('hmif.PemBarang')->with('success', 'Peminjaman berhasil ditambahkan.');
-        } catch (\Exception $e) {
-            // Log error dan tampilkan pesan error kepada pengguna
-            \Log::error('Error saat menyimpan data peminjaman: ' . $e->getMessage());
-
-            // Debug error yang terjadi
-            dd($e->getMessage()); // Tampilkan pesan error untuk debugging
-
-            return redirect()->route('hmif.PemBarang')->with('error', 'Terjadi kesalahan saat menyimpan data peminjaman. Silakan coba lagi.');
+        if (!$isAvailable) {
+            return redirect()->back()->with('error', 'Barang tidak tersedia pada waktu tersebut.');
         }
+
+        // Simpan data peminjaman
+        $filePath = $request->file('surat_peminjaman')->store('surat_peminjaman', 'public');
+
+        PeminjamanInventaris::create([
+            'id_peminjam' => Auth::id(),
+            'tanggal_peminjaman' => $validatedData['tanggal_peminjaman'],
+            'jam_mulai' => $validatedData['jam_mulai'],
+            'jam_selesai' => $validatedData['jam_selesai'],
+            'surat_peminjaman' => $filePath,
+            'id_inventaris' => $validatedData['id_inventaris'],
+            'status' => 'diajukan',
+            'keterangan_peminjaman' => $validatedData['keterangan_peminjaman']
+        ]);
+
+        return redirect()->route('hmif.PemBarang')->with('success', 'Peminjaman berhasil ditambahkan.');
     }
+
 }
