@@ -11,6 +11,8 @@ class PeminjamanInventaris extends Model
 
     protected $table = 'peminjaman_inventaris';
 
+    protected $primaryKey ='id_peminjaman_inventaris';
+
     protected $fillable = [
         'id_peminjam',
         'surat_peminjaman',

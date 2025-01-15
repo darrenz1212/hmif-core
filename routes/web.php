@@ -6,6 +6,7 @@ use App\Http\Controllers\KalabController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\HmifController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\JadwalRuanganController;
 
 Route::get('/', function () {
     return view('login');
@@ -35,11 +36,21 @@ Route::get('klb/showPengajuan',[KalabController::class, 'showPengajuan'])->name(
 Route::post('klb/peminjaman/{id}/approve', [KalabController::class, 'aprrovePengajuan'])->name('peminjaman.approve');
 Route::post('klb/peminjaman/{id}/decline', [KalabController::class, 'declinePengajuan'])->name('peminjaman.decline');
 
+Route::get('klb/showPeminjamanBarang',[KalabController::class,'showPengajuanInventaris'])->name('klb.showPengajuanInventaris');
+Route::put('/kalab/peminjaman/{id}/approve', [KalabController::class, 'approvedPengajuanBarang'])->name('kalab.approvedPengajuanBarang');
+Route::put('/kalab/peminjaman/{id}/decline', [KalabController::class, 'declinePengajuanBarang'])->name('kalab.declinePengajuanBarang');
+
+
 
 Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan'])->name('klbapi.jadwalRuangan');
 Route::get('/klb/api/ruangan', [KalabController::class, 'getRuangan'])->name('klbapi.ruangan');
 Route::get('/klb/api/jadwalRuanganByRoom', [KalabController::class, 'getJadwalRuanganByRoom'])->name('klbapi.jadwalRuanganByRoom');
 //====================================================== KALAB SIDE END ======================================================
+
+Route::get('/jadwalRuangan/{id}', [KalabController::class, 'getJadwalRuanganByid']);
+Route::post('/jadwalRuangan/{id}/edit', [KalabController::class, 'editJadwal'])->name('edit.jadwal');
+Route::get('/jadwalRuangan/{id}/related', [JadwalRuanganController::class,'getRelatedJadwal']);
+
 
 
 //======================================================   HMIF SIDE   ======================================================
@@ -85,7 +96,17 @@ Route::put('/stafflab/rooms/{id}', [StaffController::class, 'updateRooms'])->nam
 Route::get('/stafflab/inventory', [StaffController::class, 'inventory'])->name('stafflab.inventory');
 Route::post('/stafflab/store', [StaffController::class, 'storeInventory'])->name('stafflab.storeInventory');
 Route::put('/stafflab/update', [StaffController::class, 'updateInventory'])->name('stafflab.updateInventory');
+
+Route::get('staff/jadwalruangan',[StaffController::class, 'jadwalRuangan'])->name('staff.jadwalRuangan');
+
 //====================================================== STAFF SIDE END ======================================================
+//====================================================== STAFF&KALAB SIDE END ======================================================
+Route::post('klb/addJadwal', [KalabController::class, 'createJadwal'])->name('jadwalRuangan.store');
+
+Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan'])->name('staff.jadwalRuangan');
+Route::get('/klb/api/ruangan', [KalabController::class, 'getRuangan'])->name('klbapi.ruangan');
+Route::get('/klb/api/jadwalRuanganByRoom', [KalabController::class, 'getJadwalRuanganByRoom'])->name('klbapi.jadwalRuanganByRoom');
+//====================================================== STAFF&KALAB SIDE END ======================================================
 
 //====================================================== Debugging Session ======================================================
 Route::get('/debug/api/jadwalRuanganByRoom/{roomId}',[HmifController::class, 'getJadwalRuanganByRoom'])->name('debug.jadwalRuangan');

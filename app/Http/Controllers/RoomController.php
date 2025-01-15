@@ -17,6 +17,13 @@ class RoomController extends Controller
         return $ruangan;
     }
 
+    public function getAvRoom()
+    {
+        $ruangan = Ruangan::where('ketersediaan', true)->get();
+
+        return $ruangan;
+    }
+
     public function getAvailableRooms(Request $request)
     {
         if ($request->isMethod('get')) {

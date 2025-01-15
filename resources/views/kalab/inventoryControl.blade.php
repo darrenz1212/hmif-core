@@ -31,13 +31,6 @@
                     <td>
                         <!-- Tombol Edit -->
                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editInventoryModal{{ $i->id_inventaris }}">Edit</button>
-
-                        <!-- Tombol Hapus -->
-                        <form action="{{ route('inventory.destroy', $i->id_inventaris) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus inventaris ini?')">Hapus</button>
-                        </form>
                     </td>
                 </tr>
             @endforeach

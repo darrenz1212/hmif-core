@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventaris;
 use App\Models\JadwalRuangan;
+use App\Models\PeminjamanInventaris;
 use App\Models\Ruangan;
 use Illuminate\Http\Request;
 
@@ -32,7 +34,7 @@ class KalabController extends Controller
     public function getRuangan()
     {
         $getRuangan = new RoomController();
-        $ruangan = $getRuangan ->getAllRoom();
+        $ruangan = $getRuangan ->getAvRoom();
 
         return response()->json($ruangan);
     }
@@ -61,6 +63,25 @@ class KalabController extends Controller
         return response()->json($jadwalRuanganItem->values());
 //        return dd($jadwalRuanganItem);
     }
+
+    public function getJadwalRuanganByid($id)
+    {
+        $jadwalRuangan = new JadwalRuanganController();
+        $jadwalRuanganById = $jadwalRuangan->getJadwalById($id);
+
+        return $jadwalRuanganById;
+    }
+
+    public function editJadwal(Request $request,$id)
+    {
+        $jadwalRuangan = new JadwalRuanganController();
+        $updateRuangan = $jadwalRuangan->editJadwal($request,$id);
+
+        return $updateRuangan;
+    }
+
+
+
 
     public function createJadwal(Request $request)
     {
@@ -91,13 +112,13 @@ class KalabController extends Controller
         try {
             $ruangan = Ruangan::findOrFail($id);
             $ruangan->delete();
-    
+
             return redirect()->route('kalab-showroom')->with('success', 'Ruangan berhasil dihapus.');
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->route('kalab-showroom')->with('error', 'Tidak dapat menghapus ruangan karena terkait dengan data lain.');
         }
     }
-    
+
 
 //    All inventory method is decomposition from inventoryController
     public function showInventaris()
@@ -160,6 +181,43 @@ class KalabController extends Controller
 
         return redirect()->back()->with('success', 'Peminjaman telah ditolak.');
     }
+
+    public function showPengajuanInventaris()
+    {
+        $peminjaman = PeminjamanInventaris::all();
+        $inventaris = Inventaris::all();
+
+        return view('kalab.peminjamanBarang', compact('peminjaman', 'inventaris'));
+//        return dd(compact('peminjaman', 'inventaris'));
+    }
+    public function approvedPengajuanBarang($id)
+    {
+        try {
+            $peminjaman = PeminjamanInventaris::findOrFail($id);
+            $peminjaman->update(['status' => 'disetujui']);
+            $peminjaman->save();
+
+
+            return redirect()->back()->with('success', 'Peminjaman berhasil disetujui.');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', $e);
+        }
+
+    }
+    public function declinePengajuanBarang($id)
+    {
+        try {
+            $peminjaman = PeminjamanInventaris::findOrFail($id);
+            $peminjaman->status = 'ditolak';
+            $peminjaman->save();
+
+            return redirect()->back()->with('success', 'Peminjaman berhasil ditolak.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menolak peminjaman.');
+        }
+    }
+
 
 
 }
