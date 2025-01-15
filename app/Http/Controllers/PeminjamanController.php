@@ -76,6 +76,12 @@ class PeminjamanController extends Controller
                         'feedback' => 'Jadwal bertumpuk dengan jadwal yang sudah ada. Mohon berikan pengajuan dengan jadwal yang berbeda.',
                     ]), $id);
                 }
+                elseif (in_array('Jadwal harus pada hari Senin-Sabtu antara pukul 07.00 - 21.00', $errorMessages)) {
+                    // Panggil fungsi decline jika terjadi error
+                    return $this->decline(new Request([
+                        'feedback' => 'Jadwal bertumpuk dengan jadwal yang sudah ada. Mohon berikan pengajuan dengan jadwal yang berbeda.',
+                    ]), $id);
+                }
             }
 
             return redirect()->back()->with('success', 'Peminjaman telah disetujui dan jadwal berhasil ditambahkan.');
