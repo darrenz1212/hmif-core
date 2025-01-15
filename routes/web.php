@@ -6,6 +6,7 @@ use App\Http\Controllers\KalabController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\HmifController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\JadwalRuanganController;
 
 Route::get('/', function () {
     return view('login');
@@ -45,6 +46,11 @@ Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan']
 Route::get('/klb/api/ruangan', [KalabController::class, 'getRuangan'])->name('klbapi.ruangan');
 Route::get('/klb/api/jadwalRuanganByRoom', [KalabController::class, 'getJadwalRuanganByRoom'])->name('klbapi.jadwalRuanganByRoom');
 //====================================================== KALAB SIDE END ======================================================
+
+Route::get('/jadwalRuangan/{id}', [KalabController::class, 'getJadwalRuanganByid']);
+Route::post('/jadwalRuangan/{id}/edit', [KalabController::class, 'editJadwal'])->name('edit.jadwal');
+Route::get('/jadwalRuangan/{id}/related', [JadwalRuanganController::class,'getRelatedJadwal']);
+
 
 
 //======================================================   HMIF SIDE   ======================================================
@@ -91,7 +97,7 @@ Route::get('/stafflab/inventory', [StaffController::class, 'inventory'])->name('
 Route::post('/stafflab/store', [StaffController::class, 'storeInventory'])->name('stafflab.storeInventory');
 Route::put('/stafflab/update', [StaffController::class, 'updateInventory'])->name('stafflab.updateInventory');
 
-Route::get('klb/jadwalruangan',[KalabController::class, 'jadwalRuangan'])->name('klb.jadwalRuangan');
+Route::get('staff/jadwalruangan',[StaffController::class, 'jadwalRuangan'])->name('staff.jadwalRuangan');
 Route::post('klb/addJadwal', [KalabController::class, 'createJadwal'])->name('jadwalRuangan.store');
 
 Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan'])->name('staff.jadwalRuangan');

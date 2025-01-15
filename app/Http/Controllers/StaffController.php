@@ -48,6 +48,12 @@ class StaffController extends Controller
             ->with('success', 'Fasilitas ruangan berhasil diperbarui.');
     }
 
+    public function jadwalRuangan()
+    {
+        // Render halaman kalender
+        return view('stafflab.jadwalRuangan');
+    }
+
     public function showAllRoom()
     {
         $ruangan = Ruangan::All();
@@ -99,4 +105,6 @@ class StaffController extends Controller
         $inventorController->update($request,$id);
         return redirect()->route('stafflab.inventory')->with('success', 'Kondisi barang berhasil diperbarui!');
     }
+
+
 }

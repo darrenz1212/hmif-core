@@ -128,7 +128,7 @@
                     @endif
 
                     <!-- Staff Menu -->
-                    @if(Auth::user()->role === 'staff')
+                    @if(Auth::user()->role === 'stafflab')
                         <li class="nav-item menu-open">
                             <a href="{{ route('stafflab-dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                                 <p>Dashboard</p>

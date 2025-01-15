@@ -64,6 +64,25 @@ class KalabController extends Controller
 //        return dd($jadwalRuanganItem);
     }
 
+    public function getJadwalRuanganByid($id)
+    {
+        $jadwalRuangan = new JadwalRuanganController();
+        $jadwalRuanganById = $jadwalRuangan->getJadwalById($id);
+
+        return $jadwalRuanganById;
+    }
+
+    public function editJadwal(Request $request,$id)
+    {
+        $jadwalRuangan = new JadwalRuanganController();
+        $updateRuangan = $jadwalRuangan->editJadwal($request,$id);
+
+        return $updateRuangan;
+    }
+
+
+
+
     public function createJadwal(Request $request)
     {
         $jadwalRuanganController = new JadwalRuanganController();
@@ -186,9 +205,6 @@ class KalabController extends Controller
         }
 
     }
-
-
-
     public function declinePengajuanBarang($id)
     {
         try {
