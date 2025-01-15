@@ -98,12 +98,15 @@ Route::post('/stafflab/store', [StaffController::class, 'storeInventory'])->name
 Route::put('/stafflab/update', [StaffController::class, 'updateInventory'])->name('stafflab.updateInventory');
 
 Route::get('staff/jadwalruangan',[StaffController::class, 'jadwalRuangan'])->name('staff.jadwalRuangan');
+
+//====================================================== STAFF SIDE END ======================================================
+//====================================================== STAFF&KALAB SIDE END ======================================================
 Route::post('klb/addJadwal', [KalabController::class, 'createJadwal'])->name('jadwalRuangan.store');
 
 Route::get('/klb/api/jadwalRuangan',[KalabController::class, 'getJadwalRuangan'])->name('staff.jadwalRuangan');
 Route::get('/klb/api/ruangan', [KalabController::class, 'getRuangan'])->name('klbapi.ruangan');
 Route::get('/klb/api/jadwalRuanganByRoom', [KalabController::class, 'getJadwalRuanganByRoom'])->name('klbapi.jadwalRuanganByRoom');
-//====================================================== STAFF SIDE END ======================================================
+//====================================================== STAFF&KALAB SIDE END ======================================================
 
 //====================================================== Debugging Session ======================================================
 Route::get('/debug/api/jadwalRuanganByRoom/{roomId}',[HmifController::class, 'getJadwalRuanganByRoom'])->name('debug.jadwalRuangan');

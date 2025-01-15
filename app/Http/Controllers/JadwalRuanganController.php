@@ -47,6 +47,14 @@ class JadwalRuanganController extends Controller
             'keterangan' => 'nullable|string|max:255',
             'isRepeat' => 'nullable|boolean',
         ]);
+        $hari = date('N', strtotime($validatedData['tanggal']));
+        $jam_mulai = strtotime($validatedData['jam_mulai']);
+        $jam_selesai = strtotime($validatedData['jam_selesai']);
+
+        if ($hari > 6 || $hari < 1 || $jam_mulai < strtotime('07:00') || $jam_selesai > strtotime('21:00')) {
+            return redirect()->route('klb.jadwalRuangan')
+                ->withErrors(['error' => 'Jadwal harus pada hari Senin-Sabtu antara pukul 07.00 - 21.00']);
+        }
 
         $conflict = JadwalRuangan::where('room_id', $validatedData['room_id'])
             ->where('tanggal', $validatedData['tanggal'])
@@ -106,7 +114,8 @@ class JadwalRuanganController extends Controller
         $jam_selesai = strtotime($request->jam_selesai);
 
         if ($hari > 6 || $hari < 1 || $jam_mulai < strtotime('07:00') || $jam_selesai > strtotime('21:00')) {
-            return response()->json(['message' => 'Jadwal harus pada hari Senin-Sabtu antara pukul 07.00 - 21.00'], 422);
+            return redirect()->route('klb.jadwalRuangan')
+                ->withErrors(['error' => 'Jadwal harus pada hari Senin-Sabtu antara pukul 07.00 - 21.00']);
         }
 
         $jadwal = JadwalRuangan::find($id);

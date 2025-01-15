@@ -34,7 +34,7 @@ class KalabController extends Controller
     public function getRuangan()
     {
         $getRuangan = new RoomController();
-        $ruangan = $getRuangan ->getAllRoom();
+        $ruangan = $getRuangan ->getAvRoom();
 
         return response()->json($ruangan);
     }
