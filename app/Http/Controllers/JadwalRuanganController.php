@@ -87,7 +87,7 @@ class JadwalRuanganController extends Controller
 
             $currentDate = date('Y-m-d', strtotime($currentDate . ' +7 days'));
         }
-//        return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan.');
     }
 
     public function getJadwalById($id)

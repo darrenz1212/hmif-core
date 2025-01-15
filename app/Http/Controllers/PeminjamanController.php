@@ -37,11 +37,10 @@ class PeminjamanController extends Controller
         return $peminjamanRuangan;
     }
 
-        public function approved(Request $request, $id)
+    public function approved(Request $request, $id)
     {
         // Validasi input feedback
         $validated = $request->validate([
-
             'feedback' => 'required|string|max:255',
         ]);
 
@@ -57,8 +56,9 @@ class PeminjamanController extends Controller
                 'feedback' => $validated['feedback'],
             ]);
 
+            // Panggil controller JadwalRuanganController untuk menambah jadwal
             $jadwalRuanganController = app(JadwalRuanganController::class);
-            $jadwalRuanganController->addJadwal(new Request([
+            $response = $jadwalRuanganController->addJadwal(new Request([
                 'room_id' => $peminjaman->id_ruangan,
                 'tanggal' => $peminjaman->tanggal_peminjaman,
                 'jam_mulai' => $jamMulai,
@@ -67,11 +67,23 @@ class PeminjamanController extends Controller
                 'isRepeat' => '0',
             ]));
 
+            // Periksa apakah addJadwal menghasilkan error
+            if ($response instanceof \Illuminate\Http\RedirectResponse && $response->getSession()->has('errors')) {
+                $errorMessages = $response->getSession()->get('errors')->getBag('default')->all();
+                if (in_array('Jadwal bertumpuk dengan jadwal yang sudah ada.', $errorMessages)) {
+                    // Panggil fungsi decline jika terjadi error
+                    return $this->decline(new Request([
+                        'feedback' => 'Jadwal bertumpuk dengan jadwal yang sudah ada. Mohon berikan pengajuan dengan jadwal yang berbeda.',
+                    ]), $id);
+                }
+            }
 
+            return redirect()->back()->with('success', 'Peminjaman telah disetujui dan jadwal berhasil ditambahkan.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
         }
     }
+
 
     public function decline(Request $request, $id)
     {
