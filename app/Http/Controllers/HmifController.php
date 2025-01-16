@@ -92,13 +92,20 @@ class HmifController extends Controller
             'surat_peminjaman' => 'required|file|mimes:pdf|max:2048',
         ]);
 
-        // Membentuk nama file sesuai format untuk ruangan
-        $fileName = sprintf('ruangan_%d%d%d.pdf', DB::table('peminjaman_ruangan')->max('id_peminjaman_ruangan') + 1, Auth::id(), $validatedData['id_ruangan']);
+        // Validasi hari dan waktu
+        $dayOfWeek = date('N', strtotime($validatedData['tanggal_peminjaman']));
+        if ($dayOfWeek < 1 || $dayOfWeek > 5) {
+            return redirect()->back()->with('error', 'Peminjaman hanya diperbolehkan pada hari Senin-Jumat.');
+        }
 
-        // Menyimpan file dengan nama sesuai format ke folder tertentu
+        if ($validatedData['jam_mulai'] < '07:00' || $validatedData['jam_selesai'] > '21:00') {
+            return redirect()->back()->with('error', 'Peminjaman hanya diperbolehkan pada pukul 07.00 - 21.00.');
+        }
+
+        // Proses penyimpanan file dan data peminjaman
+        $fileName = sprintf('ruangan_%d%d%d.pdf', DB::table('peminjaman_ruangan')->max('id_peminjaman_ruangan') + 1, Auth::id(), $validatedData['id_ruangan']);
         $filePath = $request->file('surat_peminjaman')->storeAs('surat_peminjaman', $fileName, 'public');
 
-        // Insert data ke tabel dengan path file
         DB::table('peminjaman_ruangan')->insert([
             'id_ruangan' => $validatedData['id_ruangan'],
             'id_peminjam' => Auth::id(),
@@ -108,11 +115,12 @@ class HmifController extends Controller
             'surat_peminjaman' => $filePath,
             'keterangan_peminjaman' => $request->keterangan_peminjaman ?? null,
             'status' => 'sedang diajukan',
-            'feedback' => ' '
+            'feedback' => ' ',
         ]);
 
         return redirect()->route('statusPemRuangan')->with('success', 'Peminjaman ruangan berhasil ditambahkan.');
     }
+
 
 
     public function showAllRoomFacilities()
@@ -184,9 +192,19 @@ class HmifController extends Controller
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'surat_peminjaman' => 'required|file|mimes:pdf|max:2048',
             'id_inventaris' => 'required|integer|exists:inventaris,id_inventaris',
-            'keterangan_peminjaman' => 'required|string|max:255'
+            'keterangan_peminjaman' => 'required|string|max:255',
         ]);
-
+    
+        // Validasi hari dan waktu
+        $dayOfWeek = date('N', strtotime($validatedData['tanggal_peminjaman']));
+        if ($dayOfWeek < 1 || $dayOfWeek > 5) {
+            return redirect()->back()->with('error', 'Peminjaman hanya diperbolehkan pada hari Senin-Jumat.');
+        }
+    
+        if ($validatedData['jam_mulai'] < '07:00' || $validatedData['jam_selesai'] > '21:00') {
+            return redirect()->back()->with('error', 'Peminjaman hanya diperbolehkan pada pukul 07.00 - 21.00.');
+        }
+    
         // Pastikan barang tidak dipinjam pada waktu tersebut
         $isAvailable = PeminjamanInventaris::where('tanggal_peminjaman', $validatedData['tanggal_peminjaman'])
             ->where('id_inventaris', $validatedData['id_inventaris'])
@@ -197,20 +215,20 @@ class HmifController extends Controller
                     ->orWhereRaw('? BETWEEN jam_mulai AND jam_selesai', [$validatedData['jam_selesai']]);
             })
             ->doesntExist();
-
+    
         if (!$isAvailable) {
             return redirect()->back()->with('error', 'Barang tidak tersedia pada waktu tersebut.');
         }
-
+    
         // Dapatkan id_peminjaman terbaru (autoincrement) dari database
         $idPeminjaman = PeminjamanInventaris::max('id_peminjaman_inventaris') + 1;
-
+    
         // Membentuk nama file sesuai format untuk barang
         $fileName = sprintf('barang_%d%d%d.pdf', $idPeminjaman, Auth::id(), $validatedData['id_inventaris']);
-
+    
         // Menyimpan file dengan nama sesuai format ke folder tertentu
         $filePath = $request->file('surat_peminjaman')->storeAs('surat_peminjaman', $fileName, 'public');
-
+    
         // Simpan data peminjaman
         PeminjamanInventaris::create([
             'id_peminjam' => Auth::id(),
@@ -222,7 +240,8 @@ class HmifController extends Controller
             'status' => 'diajukan',
             'keterangan_peminjaman' => $validatedData['keterangan_peminjaman'],
         ]);
-
-        return redirect()->route('hmif.PemBarang')->with('success', 'Peminjaman berhasil ditambahkan.');
+    
+        return redirect()->route('hmif.PemBarang')->with('success', 'Peminjaman barang berhasil ditambahkan.');
     }
+    
 }

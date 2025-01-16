@@ -144,6 +144,11 @@
                                 <p>Inventory</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('klb.jadwalRuangan') }}" class="nav-link">
+                                <p>Jadwal Ruangan</p>
+                            </a>
+                        </li>
                     @endif
                 </ul>
 

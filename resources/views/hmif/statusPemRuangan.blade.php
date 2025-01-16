@@ -147,7 +147,6 @@
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Ajukan Peminjaman</button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -171,16 +170,28 @@
             `;
         }
 
+        const selectedDate = new Date(tanggal);
+        const dayOfWeek = selectedDate.getDay();
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const minDate = new Date(today);
+        minDate.setDate(today.getDate() + 3);
+        
         if (!tanggal || !jamMulai || !jamSelesai) {
             showAlert('Harap lengkapi semua field sebelum cek ketersediaan.');
             return;
         }
 
-        const today = new Date();
-        const selectedDate = new Date(tanggal);
-        today.setHours(0, 0, 0, 0);
-        const minDate = new Date(today);
-        minDate.setDate(today.getDate() + 3);
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+            showAlert('Peminjaman hanya diperbolehkan pada hari Senin-Jumat.');
+            return;
+        }
+
+        if (jamMulai < '07:00' || jamSelesai > '21:00') {
+            showAlert('Peminjaman hanya diperbolehkan pada pukul 07.00 - 21.00.');
+            return;
+        }
 
         if (selectedDate < minDate) {
             showAlert('Tanggal peminjaman paling cepat H+3 dari hari ini.');
