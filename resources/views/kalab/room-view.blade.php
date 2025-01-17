@@ -31,18 +31,18 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <!-- <th>No</th> -->
                 <th>Nama Ruangan</th>
                 <th>Kapasitas</th>
+                <th>Ketersediaan</th>
                 <th>Action</th>
             </tr>
             </thead>
             <tbody>
             @foreach($ruangan as $room)
                 <tr>
-                    <!-- <td>{{ $room->room_id }}</td> -->
                     <td>{{ $room->nama_ruangan }}</td>
                     <td>{{ $room->kapasitas }} orang</td>
+                    <td>{{ $room->ketersediaan == 1 ? 'Tersedia' : 'Tidak Tersedia' }}</td>
                     <td>
                         <!-- Tombol Edit -->
                         <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editRoomModal{{ $room->room_id }}">Edit</button>
@@ -70,6 +70,13 @@
                             <div class="mb-3">
                                 <label for="kapasitas" class="form-label">Kapasitas</label>
                                 <input type="number" class="form-control" name="kapasitas" id="kapasitas" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ketersediaan" class="form-label">Ketersediaan</label>
+                                <select class="form-select" name="ketersediaan" id="ketersediaan" required>
+                                    <option value="1">Tersedia</option>
+                                    <option value="0">Tidak Tersedia</option>
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -102,7 +109,13 @@
                                     <label for="kapasitas{{ $room->room_id }}" class="form-label">Kapasitas</label>
                                     <input type="number" class="form-control" name="kapasitas" id="kapasitas{{ $room->room_id }}" value="{{ $room->kapasitas }}" required>
                                 </div>
-                                <input type="hidden" name="ketersediaan" id="ketersediaan{{ $room->room_id }}" value="1">
+                                <div class="mb-3">
+                                    <label for="ketersediaan{{ $room->room_id }}" class="form-label">Ketersediaan</label>
+                                    <select class="form-select" name="ketersediaan" id="ketersediaan{{ $room->room_id }}" required>
+                                        <option value="1" {{ $room->ketersediaan == 1 ? 'selected' : '' }}>Tersedia</option>
+                                        <option value="0" {{ $room->ketersediaan == 0 ? 'selected' : '' }}>Tidak Tersedia</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -75,12 +75,14 @@ class StaffController extends Controller
         $request->validate([
             'nama_ruangan' => 'required|string|max:255',
             'kapasitas' => 'required|integer|min:1',
+            'ketersediaan' => 'required|boolean'
         ]);
 
         $ruangan = Ruangan::findOrFail($id);
         $ruangan->update([
             'nama_ruangan' => $request->nama_ruangan,
             'kapasitas' => $request->kapasitas,
+            'ketersediaan' => $request->ketersediaan
         ]);
 
         return redirect()->route('stafflab.rooms')->with('success', 'Ruangan berhasil diperbarui.');

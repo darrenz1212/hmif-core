@@ -27,7 +27,7 @@
         <thead>
             <tr>
                 <th>Nama Ruangan</th>
-                <!-- <th>Nama Peminjam</th> -->
+                <th>Keterangan</th>
                 <th>Tanggal Peminjaman</th>
                 <th>Jam Mulai</th>
                 <th>Jam Selesai</th>
@@ -40,7 +40,7 @@
             @forelse ($peminjamanRuangan as $item)
                 <tr>
                     <td>{{ $item->nama_ruangan }}</td>
-                    <!-- <td>{{ $item->nama_peminjam }}</td> -->
+                    <td>{{ $item->keterangan_peminjaman }}</td>
                     <td>{{ $item->tanggal_peminjaman }}</td>
                     <td>{{ $item->jam_mulai }}</td>
                     <td>{{ $item->jam_selesai }}</td>
@@ -234,7 +234,9 @@
                 console.error('Error:', error);
                 showAlert('Terjadi kesalahan saat memeriksa ketersediaan.', 'danger');
             });
-    });
+
+        });
+
 </script>
 
 

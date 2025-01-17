@@ -12,7 +12,7 @@
                 <tr>
                     <th>Nama Ruangan</th>
                     <th>Kapasitas</th>
-                    <!-- <th>Ketersediaan</th> -->
+                    <th>Ketersediaan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -21,12 +21,13 @@
                     <tr>
                         <td>{{ $room->nama_ruangan }}</td>
                         <td>{{ $room->kapasitas }}</td>
-                        <!-- <td>{{ $room->ketersediaan ? 'Tersedia' : 'Tidak Tersedia' }}</td> -->
+                        <td>{{ $room->ketersediaan ? 'Tersedia' : 'Tidak Tersedia' }}</td>
                         <td>
                             <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editRoomModal" 
                                 data-room-id="{{ $room->room_id }}" 
                                 data-room-name="{{ $room->nama_ruangan }}" 
-                                data-room-capacity="{{ $room->kapasitas }}">
+                                data-room-capacity="{{ $room->kapasitas }}" 
+                                data-room-availability="{{ $room->ketersediaan }}">
                                 Edit
                             </button>
                         </td>
@@ -59,13 +60,13 @@
                             <label for="kapasitas" class="form-label">Kapasitas</label>
                             <input type="number" class="form-control" id="kapasitas" name="kapasitas" required>
                         </div>
-                        <!-- <div class="mb-3">
+                        <div class="mb-3">
                             <label for="ketersediaan" class="form-label">Ketersediaan</label>
                             <select class="form-select" id="ketersediaan" name="ketersediaan" required>
                                 <option value="1">Tersedia</option>
                                 <option value="0">Tidak Tersedia</option>
                             </select>
-                        </div> -->
+                        </div>
                         <button type="submit" class="btn btn-primary">Simpan</button>
                     </form>
                 </div>
@@ -93,13 +94,13 @@
                             <label for="edit_kapasitas" class="form-label">Kapasitas</label>
                             <input type="number" class="form-control" id="edit_kapasitas" name="kapasitas" required>
                         </div>
-                        <!-- <div class="mb-3">
+                        <div class="mb-3">
                             <label for="edit_ketersediaan" class="form-label">Ketersediaan</label>
                             <select class="form-select" id="edit_ketersediaan" name="ketersediaan" required>
                                 <option value="1">Tersedia</option>
                                 <option value="0">Tidak Tersedia</option>
                             </select>
-                        </div> -->
+                        </div>
                         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                     </form>
                 </div>
