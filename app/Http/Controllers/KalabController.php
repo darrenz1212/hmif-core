@@ -190,26 +190,30 @@ class KalabController extends Controller
         return view('kalab.peminjamanBarang', compact('peminjaman', 'inventaris'));
 //        return dd(compact('peminjaman', 'inventaris'));
     }
-    public function approvedPengajuanBarang($id)
+    public function approvedPengajuanBarang(Request $request, $id)
     {
         try {
             $peminjaman = PeminjamanInventaris::findOrFail($id);
-            $peminjaman->update(['status' => 'disetujui']);
+            $peminjaman->update([
+                'status' => 'disetujui',
+                'feedback' => $request->input('feedback', 'Peminjaman barang sudah disetujui, mohon gunakan barang dengan bertanggung jawab.')
+            ]);
             $peminjaman->save();
-
 
             return redirect()->back()->with('success', 'Peminjaman berhasil disetujui.');
         } catch (\Exception $e) {
-
-            return redirect()->back()->with('error', $e);
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
     }
-    public function declinePengajuanBarang($id)
+
+    public function declinePengajuanBarang(Request $request, $id)
     {
         try {
             $peminjaman = PeminjamanInventaris::findOrFail($id);
-            $peminjaman->status = 'ditolak';
+            $peminjaman->update([
+                'status' => 'ditolak',
+                'feedback' => $request->input('feedback')
+            ]);
             $peminjaman->save();
 
             return redirect()->back()->with('success', 'Peminjaman berhasil ditolak.');
@@ -217,6 +221,7 @@ class KalabController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menolak peminjaman.');
         }
     }
+
 
 
 

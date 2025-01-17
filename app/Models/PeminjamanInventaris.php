@@ -22,6 +22,7 @@ class PeminjamanInventaris extends Model
         'jam_mulai',
         'jam_selesai',
         'keterangan_peminjaman',
+        'feedback'
     ];
 
     public $timestamps = false;

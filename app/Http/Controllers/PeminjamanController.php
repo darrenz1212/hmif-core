@@ -39,7 +39,6 @@ class PeminjamanController extends Controller
 
     public function approved(Request $request, $id)
     {
-        // Validasi input feedback
         $validated = $request->validate([
             'feedback' => 'required|string|max:255',
         ]);
@@ -50,13 +49,11 @@ class PeminjamanController extends Controller
             $jamMulai = Carbon::parse($peminjaman->jam_mulai)->format('H:i');
             $jamSelesai = Carbon::parse($peminjaman->jam_selesai)->format('H:i');
 
-            // Update status menjadi disetujui
             $peminjaman->update([
                 'status' => 'disetujui',
                 'feedback' => $validated['feedback'],
             ]);
 
-            // Panggil controller JadwalRuanganController untuk menambah jadwal
             $jadwalRuanganController = app(JadwalRuanganController::class);
             $response = $jadwalRuanganController->addJadwal(new Request([
                 'room_id' => $peminjaman->id_ruangan,
@@ -67,7 +64,6 @@ class PeminjamanController extends Controller
                 'isRepeat' => '0',
             ]));
 
-            // Periksa apakah addJadwal menghasilkan error
             if ($response instanceof \Illuminate\Http\RedirectResponse && $response->getSession()->has('errors')) {
                 $errorMessages = $response->getSession()->get('errors')->getBag('default')->all();
                 if (in_array('Jadwal bertumpuk dengan jadwal yang sudah ada.', $errorMessages)) {

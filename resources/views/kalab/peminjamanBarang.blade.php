@@ -79,9 +79,6 @@
             </tbody>
         </table>
 
-
-
-        <!-- Modal Setujui -->
         @foreach ($peminjaman as $item)
             <div class="modal fade" id="approveModal-{{ $item->id_peminjaman_inventaris }}" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -95,6 +92,12 @@
                             @method('PUT')
                             <div class="modal-body">
                                 <p>Apakah Anda yakin ingin menyetujui peminjaman <strong>{{ $item->keterangan_peminjaman ?? 'tanpa keterangan' }}</strong>?</p>
+
+                                <!-- Textarea untuk feedback -->
+                                <div class="form-group mt-3">
+                                    <label for="feedback">Feedback:</label>
+                                    <textarea name="feedback" id="feedback" class="form-control" rows="3">Peminjaman barang sudah disetujui, mohon gunakan barang dengan bertanggung jawab.</textarea>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -105,6 +108,7 @@
                 </div>
             </div>
         @endforeach
+
 
         <!-- Modal Tolak -->
         @foreach ($peminjaman as $item)
@@ -120,6 +124,12 @@
                             @method('PUT')
                             <div class="modal-body">
                                 <p>Apakah Anda yakin ingin menolak peminjaman <strong>{{ $item->keterangan_peminjaman ?? 'tanpa keterangan' }}</strong>?</p>
+
+                                <!-- Textarea untuk feedback -->
+                                <div class="form-group mt-3">
+                                    <label for="feedback-decline-{{ $item->id_peminjaman_inventaris }}">Feedback:</label>
+                                    <textarea name="feedback" id="feedback-decline-{{ $item->id_peminjaman_inventaris }}" class="form-control" rows="3" ></textarea>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -130,5 +140,6 @@
                 </div>
             </div>
         @endforeach
+
     </div>
 @endsection
