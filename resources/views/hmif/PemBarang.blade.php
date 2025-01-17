@@ -33,6 +33,7 @@
                 <th>Jam Mulai</th>
                 <th>Jam Selesai</th>
                 <th>Status</th>
+                <th>Feedback</th>
             </tr>
         </thead>
         <tbody>
@@ -60,6 +61,29 @@
                         @else
                             <span class="badge bg-secondary">Tidak Diketahui</span>
                         @endif
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#feedbackModal{{ $item->id_peminjaman_inventaris }}">
+                            Lihat Feedback
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="feedbackModal{{ $item->id_peminjaman_inventaris }}" tabindex="-1" aria-labelledby="feedbackModalLabel{{ $item->id_peminjaman_inventaris }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="feedbackModalLabel{{ $item->id_peminjaman_inventaris }}">Feedback</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ $item->feedback ?? 'Belum Ada Feedback' }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             @empty
