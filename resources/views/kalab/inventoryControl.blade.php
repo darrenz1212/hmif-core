@@ -16,7 +16,7 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Nama Barang</th>
                 <th>Kondisi</th>
                 <th>Action</th>
@@ -25,7 +25,7 @@
             <tbody>
             @foreach($inventaris as $i)
                 <tr>
-                    <td>{{ $i->id_inventaris }}</td>
+                    <!-- <td>{{ $i->id_inventaris }}</td> -->
                     <td>{{ $i->nama_barang }}</td>
                     <td>{{ $i->kondisi }}</td>
                     <td>
